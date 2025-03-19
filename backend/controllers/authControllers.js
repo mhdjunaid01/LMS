@@ -117,7 +117,7 @@ const registerStudent = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { userName, email } = req.body;
+    const {  email } = req.body;
     const user = await User.findOne({ email });
     console.log(user);
     if (!user) {
@@ -151,8 +151,8 @@ const login = async (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,
         maxAge: 120 * 60 * 1000,
-        secure: true,
-        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production", 
+        sameSite: "lax", 
       });
       res.json({
         message: "Logged in successfully",
@@ -164,12 +164,29 @@ const login = async (req, res) => {
             email: user.email,
             role: user.role,
           },
+          token,
         },
+        
       });
     }
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
-export { registerInstructor, registerStudent, login };
+
+const logout = (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", 
+      sameSite: "lax",
+    });
+    res.status(200).json({ message: 'Token removed successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+}
+export { registerInstructor, registerStudent, login ,logout};

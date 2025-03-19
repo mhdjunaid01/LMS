@@ -11,6 +11,7 @@ import courseRoute from "./routes/courseRoute.js";
 import enrollRoute from "./routes/enrollmentRoute.js";
 import attendanceRoute from "./routes/attendanceRoute.js";
 import batchRoute from './routes/batchRoute.js';
+import InstructorRoute from './routes/instructorRoute.js'
 dotenv.config();
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/courses", courseRoute);
 app.use("/enroll", enrollRoute);
 app.use('/attendance',attendanceRoute)
 app.use('/batch',batchRoute)
+app.use('/instructor',InstructorRoute)
 // Error handling middleware
 app.use(errorHandler);
 

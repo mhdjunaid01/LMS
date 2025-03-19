@@ -96,6 +96,7 @@ const getUnEnrolledStudents = async (req, res) => {
 
 const getEnrolledStudents = async (req, res) => {
   try {
+    console.log("Received request to get enrolled students");
     const enrolledStudents = await Enrollment.find().populate("studentId","-password").exec();
     if (enrolledStudents.length === 0) {
       return res
@@ -113,7 +114,9 @@ const getEnrolledStudents = async (req, res) => {
 
 const unEnroll = async (req, res) => {
   try {
-    const { studentId, courseId } = req.params;
+    console.log("Received request to unenroll student");
+    
+        const { studentId, courseId } = req.params;
 
     if (!studentId || !courseId) {
       return res.status(400).json({
@@ -122,25 +125,48 @@ const unEnroll = async (req, res) => {
       });
     }
 
+    console.log("Received request to unenroll:", studentId, courseId);
+
     // Check if student is enrolled in the course
     const unEnrollStudent = await Enrollment.findOne({ studentId, courseId });
 
-    if (!unEnrollStudent) {
-      return res.status(404).json({
-        message: "Student is not enrolled in this course.",
-        success: false,
-      });
-    }
+    // if (!unEnrollStudent) {
+    //   return res.status(404).json({
+    //     message: "Student is not enrolled in this course.",
+    //     success: false,
+    //   });
+    // }
 
+    console.log("Enrollment record found:", unEnrollStudent);
+
+    // // Fetch batch only if enrollment exists
+    // const batch = await Batch.findById(unEnrollStudent.batchId);
+
+    // if (!batch) {
+    //   return res.status(404).json({
+    //     message: "Batch not found.",
+    //     success: false,
+    //   });
+    // }
+
+    // // Remove student from batch
+    // batch.students = batch.students.filter(id => id.toString() !== studentId.toString());
+    // await batch.save();
+    
     // Remove enrollment record
     await Enrollment.findByIdAndDelete(unEnrollStudent._id);
-    await User.findByIdAndUpdate(studentId,{isEnrolled:false})
+
+    // Update user's enrollment status
+    await User.findByIdAndUpdate(studentId, { isEnrolled: false });
+
+    console.log(`Student ${studentId} successfully unenrolled from course ${courseId}`);
+
     res.status(200).json({
       message: "Student unenrolled successfully",
       success: true,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error in unenrolling student:", error);
     res.status(500).json({
       error: "Internal Server Error",
       message: error.message,
@@ -148,45 +174,4 @@ const unEnroll = async (req, res) => {
   }
 };
 
-// const unEnroll = async (req, res) => {
-//   try {
-//     console.log(req.params);
-    
-//     const { studentId} = req.params;
-// console.log(studentId);
-
-//     if (!studentId) {
-//       return res.status(400).json({
-//         message: "studentId are required.",
-//         success: false,
-//       });
-//     }
-
-//     const unEnrollStudent = await Enrollment.findOne({ studentId});
-
-//     if (!unEnrollStudent) {
-//       return res.status(404).json({
-//         message: "Student is not enrolled in this course.",
-//         success: false,
-//       });
-//     }
-
-//     await Enrollment.findByIdAndDelete(unEnrollStudent._id);
-
-//     await User.findByIdAndUpdate(studentId, { isEnrolled: false });
-
-//     // Send success response
-//     res.status(200).json({
-//       message: "Student unenrolled successfully",
-//       success: true,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     // Send error response with message
-//     res.status(500).json({
-//       error: "Internal Server Error",
-//       message: error.message,
-//     });
-//   }
-// };
 export { enrollStudent, getUnEnrolledStudents, getEnrolledStudents, unEnroll };

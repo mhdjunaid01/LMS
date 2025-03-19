@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getUnEnrolledStudents,enrollStudent,getEnrolledStudents,unEnroll } from '../controllers/entrollmentControll.js';
+import { enrollStudent, getEnrolledStudents, getUnEnrolledStudents, unEnroll } from '../controllers/entrollmentControll.js';
 
 import { verifyToken, checkRole } from '../middleware/authMiddleware.js';
 const router = express.Router();
