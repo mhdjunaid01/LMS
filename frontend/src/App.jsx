@@ -8,8 +8,8 @@ import InstructorDashboard from "./pages/instructor/InstructorDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import NotFoundPage from "./pages/page_not_found/NotFoundPage";
 import StudentDashBoard from "./pages/student/StudentDashBoard";
-import Navbar from "./components/common/Navbar";
 
+import { Toaster } from "@/components/ui/sonner"
 const App = () => {
   const { auth } = useContext(AuthContext);
   return (
@@ -62,6 +62,7 @@ const App = () => {
         />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Toaster/>
     </div>
   );
 };

@@ -1,8 +1,10 @@
 import {
   BarChart,
   Book,
+  BookUp2,
   CalendarDays,
   FolderCog,
+  Group,
   LogOut,
   School,
   UserRoundPlus,
@@ -17,6 +19,10 @@ import StudentManagement from "@/components/common/studentManagement/StudentMana
 import StudentRegister from "@/components/common/studentManagement/StudentRegister";
 import TrialStudents from "@/components/common/studentManagement/TrialStudents";
 import AddBatch from "@/components/common/batch-management/AddBatch";
+import AddCourse from "@/components/common/course-management/AddCourse";
+import EnrollStudents from "@/components/common//studentManagement/EnrollStudents";
+
+EnrollStudents
 export const menuItems = [
   {
     icon: BarChart,
@@ -41,6 +47,20 @@ export const menuItems = [
   },
   {
     icon: UserRoundPlus,
+    label: "Enroll Students",
+    value: "enrollStudents",
+    component: EnrollStudents,
+    roles: ["admin", "instructor"],
+  },
+  {
+    icon: BookUp2,
+    label: "Add Course",
+    value: "addCourse",
+    component: AddCourse,
+    roles: ["admin", "instructor"],
+  },
+  {
+    icon: Group,
     label: "Add Batch",
     value: "addBatch",
     component: AddBatch,
@@ -65,7 +85,7 @@ export const menuItems = [
     label: "Attendance",
     value: "attendance",
     component: AttendanceManagement,
-    roles: ["admin", "instructor"],
+    roles: ["instructor"],
   },
   {
     icon: FolderCog,

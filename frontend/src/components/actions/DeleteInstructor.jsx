@@ -1,16 +1,16 @@
 
 import axiosInstance from "@/utils/axiosInstance";
 
-const handleDeleteInstructor = async (id, instructors, setInstructors) => {
-  if (!id) {
+const handleDeleteInstructor = async (item, instructors, setInstructors) => {
+  if (!item._id) {
     throw new Error("Instructor ID is undefined! Cannot delete.");
   }
 
   try {
-    const response = await axiosInstance.delete(`/instructor/deleteInstructor/${id}`);
+    const response = await axiosInstance.delete(`/instructor/deleteInstructor/${item._id}`);
 
     if (response.data.success) {
-      setInstructors(instructors.filter((inst) => inst._id !== id));
+      setInstructors(instructors.filter((inst) => inst._id !== item._id));
     } else {
       throw new Error(`Delete request failed: ${response.data.message}`);
     }

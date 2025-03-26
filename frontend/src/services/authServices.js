@@ -19,7 +19,7 @@ export const logInService = async (formData) => {
 
 
 // Register instructor
-export const registerInstrutorService = async (formData) => {
+export const registerInstructorService = async (formData) => {
   try {
     console.log("Instructor SignUp Data:", formData);
     const response = await axiosInstance.post("/auth/registerInstructor", formData, { withCredentials: true });

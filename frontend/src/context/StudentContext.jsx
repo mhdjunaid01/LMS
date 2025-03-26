@@ -15,6 +15,7 @@ export const StudentProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get("/enroll/getEnrolledStudents");
+console.log(response.data.enrolledStudents);
 
       if (
         response.data.success &&
@@ -22,12 +23,17 @@ export const StudentProvider = ({ children }) => {
       ) {
         const formattedStudents = response.data.enrolledStudents.map((entry) => ({
           _id: entry._id, // Enrollment ID
-          studentId: entry.studentId?._id,  // Store studentId for deletion
-          courseId: entry.courseId,         // Store courseId for deletion
-          userName: entry.studentId?.userName || "N/A",
-          email: entry.studentId?.email || "N/A",
-          role: entry.studentId?.role || "N/A",
+          studentId: entry.studentId?._id || "",  // Store studentId for deletion
+          courseName: entry.courseId?.title || "",         // Store courseId for deletion
+          batchName: entry.batchId?.batchName|| "",
+          courseId: entry.courseId?._id || "", 
+          batchId: entry.batchId?._id|| "",
+          userName: entry.studentId?.userName || "",
+          email: entry.studentId?.email || "",
+          role: entry.studentId?.role || "",
         }));
+        
+console.log(formattedStudents);
 
         setStudents(formattedStudents);
       } else {

@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/enrollStudent',verifyToken,checkRole(['admin','instructor']),enrollStudent);
 router.get('/getUnEnrolledStudents',verifyToken,checkRole(['admin','instructor']),getUnEnrolledStudents);
 router.get('/getEnrolledStudents',verifyToken,checkRole(['admin','instructor']),getEnrolledStudents);
-router.delete('/unenroll/:studentId/:courseId',verifyToken,checkRole(['admin','instructor']),unEnroll);
+router.delete('/unenroll/:studentId/:courseId/:batchId/:enrollmentId',verifyToken,checkRole(['admin','instructor']),unEnroll);
 
 
 

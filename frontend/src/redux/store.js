@@ -1,7 +1,8 @@
-// import { configureStore } from "@reduxjs/toolkit";
-// import counterSlice from "../redux/instructorSlice/instructorSlice.js"
-// export const store = configureStore({
-//     reducer:{
-//         instructorData:counterSlice
-//     },
-// })
+import { configureStore } from "@reduxjs/toolkit";
+import attendanceReducer from "./attendanceSlice/attendanceSlice.js";
+
+export const store = configureStore({
+  reducer: {
+    attendanceData: attendanceReducer, 
+  },
+});

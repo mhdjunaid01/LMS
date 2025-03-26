@@ -1,79 +1,61 @@
 import { InitialBatchFormData } from "@/config/customForms";
 import axiosInstance from "@/utils/axiosInstance";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useCourseContext } from "./CourseContext";
+import { useInstructorContext } from "./InstructorContext";
+import {toast} from 'sonner'
 const BatchContext = createContext();
 
 export const BatchProvider = ({ children }) => {
+  const {courses } =useCourseContext()
+  const {instructors}=useInstructorContext()
   const [batchFormData, setBatchFormData] = useState(InitialBatchFormData);
-  const [courses, setCourses] = useState([]);
-  const [instructors, setInstructors] = useState([]);
   const [batch, setBatch] = useState([]);
   const [error, setError] = useState("");
-
-  
+  const [loading, setLoading] = useState(true); 
   const fetchBatches = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.get("/batch/getAllBatches");
       setBatch(response.data.batches || []);
-      console.log("Fetched Batches:", response.data.batches);
     } catch (error) {
       console.error("Error fetching batches:", error);
       setError("Error fetching batches: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Fetch Courses
-  const fetchCourses = async () => {
-    try {
-      const response = await axiosInstance.get("/courses/getCourses");
-      setCourses(response.data.courses);
-      console.log("courses::", response.data.courses);
-      console.log(courses);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-    }
-  };
 
-  // Fetch Instructors
-  const fetchInstructors = async () => {
-    try {
-      const response = await axiosInstance.get("/instructor/getInstructor");
-      setInstructors(response.data.instructors || []);
-    } catch (error) {
-      setInstructors([]);
-      console.error("Error fetching instructors:", error);
-    }
-  };
- 
+
   useEffect(() => {
-    fetchCourses();
-    fetchInstructors();
-    fetchBatches(); 
-  }, []);
+    fetchBatches();
+  }, [setBatch]);
 
-  const handleAddBatch = async (event) => {
-    event.preventDefault();
-    console.log(batchFormData);
-    try {
-      const response = await axiosInstance.post("/batch/createBatch", batchFormData);
-      console.log("Batch Created:", response.data);
+    const handleAddBatch = async (event) => {
+      event.preventDefault();
+      try {
+        const batchData = {
+          ...batchFormData,
+          batchName: batchFormData.batchName.toUpperCase(),
+        };
 
+        const response = await axiosInstance.post("/batch/createBatch", batchData);
 
-      if (response.data?.success && response.data?.batch) {
-        setBatch((prevBatches) => [...prevBatches, response.data.batch]);
-          setBatchFormData(InitialBatchFormData);
-          fetchBatches();
-        } else {
-          setError(response.data?.message || "Failed to create batch.");
+        if (response.data?.success && response.data?.batch) {
+          setBatch((prevBatches) => [...prevBatches, response.data.batch]);
+        setBatchFormData(InitialBatchFormData);
+        fetchBatches();
+        toast.success("successfully create batch.");
+      } else {
+        setError(response.data?.message || "Failed to create batch.");
+        toast.error("Failed to create batch.")
       }
     } catch (error) {
       console.error("Error adding batch:", error);
-      setError(
-        error.response?.data?.message || "An unexpected error occurred while adding the batch."
-      );
+      setError("An unexpected error occurred while adding the batch.");
     }
   };
-
 
   return (
     <BatchContext.Provider
@@ -84,8 +66,10 @@ export const BatchProvider = ({ children }) => {
         instructors,
         handleAddBatch,
         batch,
+        setBatch,
         error,
         fetchBatches,
+        loading, 
       }}
     >
       {children}

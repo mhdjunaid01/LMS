@@ -1,54 +1,35 @@
-import React from 'react'
+import React from "react";
+import ManagementTable from "@/components/dynamicTable/managementTable";
+import handleDeleteCourse from "@/components/actions/DeleteCourse";
+import { useCourseContext } from "@/context/courseContext";
+import handleEditCourse from "@/components/actions/EditCourse";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Edit, Trash } from "lucide-react";
 const CourseManagement = () => {
+  const { courses,setCourses } = useCourseContext();
 
+  const columns = ["Title", "Description", "Category"];
+  const columnMapping = {
+    Title: "title",
+    Description: "description",
+    Category: "category",
+  };
+
+  const handleDelete = async(item)=>{
+   await  handleDeleteCourse(item,courses,setCourses)
+  }
+ const  handleEdit =async(updatedItem)=>{
+  await handleEditCourse(updatedItem,setCourses)
+ }
   return (
-    <Card>
-    <CardHeader className="flex justify-between flex-row items-center">
-      <CardTitle className="text-3xl font-extrabold">All Courses</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Course</TableHead>
-              <TableHead>Students</TableHead>
-              <TableHead>Revenue</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">React js Full Course 2025</TableCell>
-              <TableCell>100</TableCell>
-              <TableCell>$5000</TableCell>
-              <TableCell className="text-right">
-                <Button variant="ghost" size="sm">
-                  <Edit className="h6 w-6"/>
-                </Button>
-                <Button variant="ghost" size="sm">
-                  <Trash className="h6 w-6"/>
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
-    </CardContent>
-  </Card>
-  )
-}
+    <ManagementTable
+      title="Course Management"
+      columns={columns}
+      columnMapping={columnMapping}
+      data={courses}
+      onDelete={handleDelete}
+      onSave={handleEdit}
+    />
+  );
+};
 
-export default CourseManagement
+export default CourseManagement;

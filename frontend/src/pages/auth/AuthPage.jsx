@@ -1,4 +1,4 @@
-import CommenForm from "@/components/common/CommenForm";
+import CommenForm from "@/components/common/CommonForm";
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "@/context/AuthContext";
 import { signInFormControls } from "@/config/customForms";
 import { checkIfSignInFormIsValid } from "@/utils/authUtils.js";
+import { signIpSchema } from "@/services/schemasZod";
 const AuthPage = () => {
   const [activeTab,setActiveTab]=useState("signIn");
   const { signInFormData, setSignInFormData, handleLoginUser } =
@@ -59,6 +60,7 @@ const AuthPage = () => {
                   setFormData={setSignInFormData}
                   isButtonDisabled={!checkIfSignInFormIsValid}
                   handleSubmit={handleLoginUser}
+                  validationSchema={signIpSchema}
                 />
               </CardContent>
             </Card>

@@ -3,11 +3,11 @@ import axiosInstance from "@/utils/axiosInstance";
 import {
   logInService,
   logOutService,
-  registerInstrutorService,
+  registerInstructorService,
   registerStudentService,
 } from "@/services/authServices";
 import { initialSignInFormData, initialSignUpFormData } from "@/config/customForms";
-
+import {toast} from 'sonner'
 export const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
@@ -59,8 +59,10 @@ const [userRole, setUserRole] = useState("");
         setAuthenticatedUser(data.user);
 
         setShouldReload(true);
+        toast.success("User Login successfully!");
       } else {
         setUnauthenticatedUser();
+        toast.error("User Login Failed")
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -81,10 +83,12 @@ useEffect(() => {
     event.preventDefault();
     setAuthLoading(true);
     try {
-      await registerInstrutorService(signUpFormData);
+      await registerInstructorService(signUpFormData);
       setSignUpFormData(initialSignUpFormData);
+      toast.success("Instrutor register successfully!");
     } finally {
       setAuthLoading(false);
+  
     }
   }, [signUpFormData]);
 
@@ -95,8 +99,10 @@ useEffect(() => {
     try {
       await registerStudentService(signUpFormData);
       setSignUpFormData(initialSignUpFormData);
+      toast.success("Student register successfully!");
     } finally {
       setAuthLoading(false);
+      
     }
   }, [signUpFormData]);
 //removeToken
@@ -125,6 +131,7 @@ useEffect(() => {
       authLoading,
       userRole,
       setUserRole,
+      initialSignUpFormData
     }),
     [
       signInFormData,
@@ -138,6 +145,7 @@ useEffect(() => {
       removeToken,
       userRole,
       setUserRole,
+      initialSignUpFormData
       
     ]
   );

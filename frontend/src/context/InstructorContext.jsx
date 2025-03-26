@@ -4,7 +4,7 @@ import axiosInstance from "@/utils/axiosInstance";
 // Create Context
 const InstructorContext = createContext();
 
-// Custom Hook for Using Context
+
 export const useInstructorContext = () => useContext(InstructorContext);
 
 export const InstructorProvider = ({ children }) => {

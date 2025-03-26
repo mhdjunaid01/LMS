@@ -1,14 +1,14 @@
 import { useBatchContext } from "@/context/BatchContext";
 import { batchFormControls } from "@/config/customForms";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import CommenForm from "../CommenForm";
+import CommonForm from "../CommonForm";
 import { checkBatchFormIsValid } from "@/utils/batchUtils";
+import { batchSchema } from "@/services/schemasZod";
 
 export default function AddBatch() {
-  const { batchFormData, setBatchFormData, courses, instructors,handleAddBatch} = useBatchContext();
-  console.log("Batch Form Data:", batchFormData);
- const formControls= batchFormControls(courses || [], instructors || [])
-  console.log("Form Controls:", formControls);
+  const { batchFormData, setBatchFormData, courses, instructors, handleAddBatch } = useBatchContext();
+  
+  const formControls = batchFormControls(courses || [], instructors || []);
 
   return (
     <Card className="p-6 space-y-4">
@@ -17,13 +17,14 @@ export default function AddBatch() {
         <CardDescription>Enter batch details including Course and Instructor.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
-        <CommenForm
-       formControls={batchFormControls(courses || [], instructors || [])}
+        <CommonForm
+          formControls={formControls}
           buttonText={"Add Batch"}
           formData={batchFormData}
           setFormData={setBatchFormData}
           isButtonDisabled={!checkBatchFormIsValid(batchFormData)}
           handleSubmit={handleAddBatch}
+          validationSchema={batchSchema}
         />
       </CardContent>
     </Card>

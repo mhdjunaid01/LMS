@@ -1,14 +1,16 @@
 import axiosInstance from "@/utils/axiosInstance";
 
-const handleDeleteStudent = async (studentId, courseId, students, setStudents) => {
+const handleDeleteStudent = async (items, students, setStudents) => {
+  console.log("items",items);
+  const {studentId,courseId,batchId,_id}=items
   if (!studentId || !courseId) {
     console.error("Missing studentId or courseId! Cannot delete enrollment.");
     return;
   }
 
   try {
-    console.log("Sending unenroll request:", studentId, courseId);
-    const response = await axiosInstance.delete(`/enroll/unenroll/${studentId}/${courseId}`);
+    console.log("Sending unenroll request:", studentId);
+    const response = await axiosInstance.delete(`/enroll/unenroll/${studentId}/${courseId}/${batchId}/${_id}`);
 
     if (response.data.success) {
       console.log("Student unenrolled successfully:", response.data.message);

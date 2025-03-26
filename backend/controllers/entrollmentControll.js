@@ -79,7 +79,7 @@ const enrollStudent = async (req, res) => {
 };
 
 
-const getUnEnrolledStudents = async (req, res) => {
+const getUnEnrolledStudents = async (_,res) => {
   try {
     const unEnrolledStudents = await User.find({
       role: "student",
@@ -97,7 +97,12 @@ const getUnEnrolledStudents = async (req, res) => {
 const getEnrolledStudents = async (req, res) => {
   try {
     console.log("Received request to get enrolled students");
-    const enrolledStudents = await Enrollment.find().populate("studentId","-password").exec();
+    const enrolledStudents = await Enrollment.find()
+      .populate("studentId", "-password")
+      .populate("courseId", "title")
+      .populate("batchId", "batchName")
+      .exec();
+
     if (enrolledStudents.length === 0) {
       return res
         .status(404)
@@ -116,45 +121,45 @@ const unEnroll = async (req, res) => {
   try {
     console.log("Received request to unenroll student");
     
-        const { studentId, courseId } = req.params;
+        const { studentId,courseId,batchId,enrollmentId} = req.params;
 
-    if (!studentId || !courseId) {
+    if (!studentId) {
       return res.status(400).json({
         message: "studentId and courseId are required.",
         success: false,
       });
     }
 
-    console.log("Received request to unenroll:", studentId, courseId);
+    console.log("Received request to unenroll:", studentId);
 
     // Check if student is enrolled in the course
-    const unEnrollStudent = await Enrollment.findOne({ studentId, courseId });
+    const unEnrollStudent = await Enrollment.findOne({ studentId});
 
-    // if (!unEnrollStudent) {
-    //   return res.status(404).json({
-    //     message: "Student is not enrolled in this course.",
-    //     success: false,
-    //   });
-    // }
+    if (!unEnrollStudent) {
+      return res.status(404).json({
+        message: "Student is not enrolled in this course.",
+        success: false,
+      });
+    }
 
     console.log("Enrollment record found:", unEnrollStudent);
 
     // // Fetch batch only if enrollment exists
-    // const batch = await Batch.findById(unEnrollStudent.batchId);
+    const batch = await Batch.findById(batchId);
 
-    // if (!batch) {
-    //   return res.status(404).json({
-    //     message: "Batch not found.",
-    //     success: false,
-    //   });
-    // }
+    if (!batch) {
+      return res.status(404).json({
+        message: "Batch not found.",
+        success: false,
+      });
+    }
 
-    // // Remove student from batch
-    // batch.students = batch.students.filter(id => id.toString() !== studentId.toString());
-    // await batch.save();
+    // Remove student from batch
+    batch.students = batch.students.filter(id => id.toString() !== studentId.toString());
+    await batch.save();
     
     // Remove enrollment record
-    await Enrollment.findByIdAndDelete(unEnrollStudent._id);
+    await Enrollment.findByIdAndDelete(enrollmentId);
 
     // Update user's enrollment status
     await User.findByIdAndUpdate(studentId, { isEnrolled: false });

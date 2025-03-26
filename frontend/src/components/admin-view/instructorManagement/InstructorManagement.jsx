@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import ManagementTable from "../../dynamicTable/managementTable";
 import axiosInstance from "../../../utils/axiosInstance";
 import handleDeleteInstructor from "../../actions/DeleteInstructor";
+import { useInstructorContext } from "@/context/InstructorContext";
+import handleEditInstructor from "@/components/actions/EditInstructor";
 const InstructorManagement = () => {
-  const [instructors, setInstructors] = useState([]);
+  const {instructors, setInstructors} = useInstructorContext()
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -51,9 +53,14 @@ const InstructorManagement = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-  const handleDelete = async (id) => {
-    await handleDeleteInstructor(id, instructors, setInstructors);
+  const handleDelete = async (item) => {
+    await handleDeleteInstructor(item, instructors, setInstructors);
   };
+
+  const handleEdit = async (updatedItem) => {
+     await handleEditInstructor(updatedItem, setInstructors);
+  }
+
   return (
     <ManagementTable
       title="Instructor Management"
@@ -61,7 +68,7 @@ const InstructorManagement = () => {
       data={instructors}
       columnMapping={columnMapping}
       onDelete={handleDelete}
-      // onEdit={handleEditInstructor}
+      onSave={handleEdit}
 
     />
   );
