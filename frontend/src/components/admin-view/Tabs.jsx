@@ -2,7 +2,7 @@ import React from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { getFilteredMenuItems } from "@/utils/constants.js";
 
-const AdminTabs = ({ activeTab, setActiveTab, role }) => {
+const NavTabs = ({ activeTab, setActiveTab, role }) => {
   const filteredMenuItems = getFilteredMenuItems(role);
 
   return (
@@ -19,4 +19,4 @@ const AdminTabs = ({ activeTab, setActiveTab, role }) => {
   );
 };
 
-export default AdminTabs;
+export default NavTabs;

@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 
 const StudentList = ({ students, handleAttendanceSubmit }) => {
   const [attendanceData, setAttendanceData] = useState({});
@@ -30,55 +33,70 @@ const StudentList = ({ students, handleAttendanceSubmit }) => {
   };
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-xl font-semibold mb-4">Mark Attendance</h2>
+    <Card>
+      <CardHeader>
+        <CardTitle>Mark Attendance</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {students.length === 0 ? (
+          <p className="text-muted-foreground text-center">No students found.</p>
+        ) : (
+          <>
+            <div className="space-y-4">
+              {students.map((student) => (
+                <div 
+                  key={student.id} 
+                  className="flex justify-between items-center border-b pb-2"
+                >
+                  <span className="text-lg font-medium">{student.userName}</span>
 
-      {students.length === 0 ? (
-        <p className="text-gray-500">No students found.</p>
-      ) : (
-        <ul className="space-y-4">
-          {students.map((student) => (
-            <li key={student.id} className="flex justify-between items-center border-b pb-2">
-              <span className="text-lg">{student.userName}</span>
+                  <div className="space-x-4 flex items-center">
+                    <Label 
+                      className="flex items-center space-x-2 cursor-pointer"
+                    >
+                      <input
+                        type="radio"
+                        name={`attendance-${student.id}`}
+                        value="present"
+                        onChange={() => handleAttendanceChange(student.id, 'present')}
+                        checked={attendanceData[student.id] === 'present'}
+                        className="form-radio"
+                      />
+                      <span>Present</span>
+                    </Label>
 
-              <div className="space-x-4">
-                <label className="flex items-center space-x-1">
-                  <input
-                    type="radio"
-                    name={`attendance-${student.id}`}
-                    value="present"
-                    onChange={() => handleAttendanceChange(student.id, 'present')}
-                    checked={attendanceData[student.id] === 'present'}
-                  />
-                  <span>Present</span>
-                </label>
+                    <Label 
+                      className="flex items-center space-x-2 cursor-pointer"
+                    >
+                      <input
+                        type="radio"
+                        name={`attendance-${student.id}`}
+                        value="absent"
+                        onChange={() => handleAttendanceChange(student.id, 'absent')}
+                        checked={attendanceData[student.id] === 'absent'}
+                        className="form-radio"
+                      />
+                      <span>Absent</span>
+                    </Label>
+                  </div>
+                </div>
+              ))}
+            </div>
 
-                <label className="flex items-center space-x-1">
-                  <input
-                    type="radio"
-                    name={`attendance-${student.id}`}
-                    value="absent"
-                    onChange={() => handleAttendanceChange(student.id, 'absent')}
-                    checked={attendanceData[student.id] === 'absent'}
-                  />
-                  <span>Absent</span>
-                </label>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {students.length > 0 && (
-        <button
-          onClick={handleSubmit}
-          disabled={!isAllMarked}
-          className={`mt-4 px-4 py-2 ${isAllMarked ? 'bg-blue-500 text-white rounded-lg hover:bg-blue-600' : 'bg-gray-500 text-white rounded-lg'}`}
-        >
-          {isAllMarked ? 'Submit Attendance' : 'Please mark attendance for all students'}
-        </button>
-      )}
-    </div>
+            {students.length > 0 && (
+              <Button
+                onClick={handleSubmit}
+                disabled={!isAllMarked}
+                className="w-full mt-4"
+                variant={isAllMarked ? 'default' : 'secondary'}
+              >
+                {isAllMarked ? 'Submit Attendance' : 'Please mark attendance for all students'}
+              </Button>
+            )}
+          </>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

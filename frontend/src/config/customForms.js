@@ -208,3 +208,51 @@ export const enrollFormControls = (unEnrolledStudents,courses, batch) => [
     })),
   },
 ];
+export const initialLiveClassFormData = {
+  title: "",
+  courseId: "",
+  batchId: "",
+  scheduledTime: "",
+  meetingLink: "",
+};
+
+export const liveClassFormControl = (courses = [],batch) => [
+  {
+    name: "title",
+    label: "Class Title",
+    placeholder: "Enter class title",
+    componentType: "input",
+    type: "text",
+  },
+  {
+    name: "scheduledTime",
+    label: "Scheduled Time",
+    placeholder: "Select class date & time",
+    componentType: "input",
+    type: "datetime-local",
+  },
+  {
+    name: "meetingLink",
+    label: "Meeting Link",
+    placeholder: "Enter meeting link",
+    componentType: "input",
+    type: "text",
+  },
+  {
+    name: "batchId",
+    label: "Batch",
+    componentType: "select",
+    options: batch.map((b) => ({
+      value: b._id,
+      label: b.batchName,
+    })), 
+  }, {
+    name: "courseId",
+    label: "Course",
+    componentType: "select",
+    options: courses.map((course) => ({
+      value: course._id,
+      label: course.title,
+    })),
+  },
+];

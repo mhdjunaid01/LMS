@@ -40,3 +40,10 @@ export const enrollSchema = z.object({
   courseId: z.string().min(1, "Course must be provided"),
   batchId: z.string().min(1, "Batch must be provided")
 })
+
+export const liveClassSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  scheduledTime: z.string().nonempty("Scheduled Time is required"),
+  meetingLink: z.string().url("Enter a valid meeting link"),
+  courseId: z.string().nonempty("Course selection is required"),
+});

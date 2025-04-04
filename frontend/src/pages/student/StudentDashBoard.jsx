@@ -1,9 +1,36 @@
-import React from 'react'
+import { useContext, useState } from "react";
+import NavTabs from "@/components/admin-view/Tabs";
+import MobileNavbar from "@/components/admin-view/MobileNavbar";
+import SideBar from "@/components/admin-view/sidebar";
+import { AuthContext } from "@/context/AuthContext";
 
-const StudentDashBoard = () => {
+const StudentDashboard = () => {
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const { removeToken, userRole } = useContext(AuthContext); // Get role from context
+
+  const handleLogout = () => removeToken();
+
   return (
-    <div>StudentDashBoard</div>
-  )
-}
+    <div className="flex flex-col md:flex-row h-full min-h-screen bg-gray-100">
+      <MobileNavbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        handleLogout={handleLogout}
+        role={userRole} // Pass role to MobileNavbar
+      />
+      <SideBar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        handleLogout={handleLogout}
+        role={userRole} // Pass role to Sidebar
+      />
 
-export default StudentDashBoard
+      {/* Main Content */}
+      <main className="flex-1 p-4 md:p-8 overflow-y-auto">
+        <NavTabs activeTab={activeTab} setActiveTab={setActiveTab} role={userRole} />
+      </main>
+    </div>
+  );
+};
+
+export default StudentDashboard;

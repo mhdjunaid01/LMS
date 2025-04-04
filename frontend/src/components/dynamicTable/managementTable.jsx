@@ -15,7 +15,7 @@ import EditModal from "../modal/EditModal";
 import { toast } from "sonner"
 
 
-const ManagementTable = ({ title, columns, data, columnMapping, onDelete, onSave }) => {
+const ManagementTable = ({ title, columns, data, columnMapping, onDelete, onSave,hideDelete,hideEdit}) => {
 
   if (!data || data.length === 0) {
     return <p>No data available.</p>;
@@ -81,6 +81,7 @@ const ManagementTable = ({ title, columns, data, columnMapping, onDelete, onSave
                       </TableCell>
                     ))}
                     <TableCell className="text-right">
+                      {hideEdit!== true ?
                       <Button
                         variant="ghost"
                         size="sm"
@@ -88,6 +89,11 @@ const ManagementTable = ({ title, columns, data, columnMapping, onDelete, onSave
                       >
                         <Edit className="h6 w-6" />
                       </Button>
+                      :
+                      null
+                      
+                    }
+                      { hideDelete!==true ?
                       <Button
                         variant="ghost"
                         size="sm"
@@ -95,6 +101,9 @@ const ManagementTable = ({ title, columns, data, columnMapping, onDelete, onSave
                       >
                         <Trash className="h6 w-6" />
                       </Button>
+                      :
+                      null
+}
                     </TableCell>
                   </TableRow>
                 ))

@@ -8,23 +8,29 @@ import { StudentProvider } from "./context/StudentContext";
 import { BatchProvider } from "./context/BatchContext";
 import { CourseProvider } from "./context/CourseContext";
 import { EnrollmentProvider } from "./context/EnrollmentContext";
+import { NotificationProvider } from "./context/NotificationContext";
+import { ScheduleProvider } from "./context/ScheduleContext";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <BrowserRouter>
       <AuthProvider>
-        <InstructorProvider>
-          <StudentProvider>
-            <EnrollmentProvider>
-              <CourseProvider>
-                <BatchProvider>
-                  <App />
-                </BatchProvider>
-              </CourseProvider>
-            </EnrollmentProvider>
-          </StudentProvider>
-        </InstructorProvider>
+          <InstructorProvider>
+            <ScheduleProvider>
+        <NotificationProvider>
+              <StudentProvider>
+                <EnrollmentProvider>
+                  <CourseProvider>
+                    <BatchProvider>
+                      <App />
+                    </BatchProvider>
+                  </CourseProvider>
+                </EnrollmentProvider>
+              </StudentProvider>
+        </NotificationProvider>
+            </ScheduleProvider>
+          </InstructorProvider>
       </AuthProvider>
     </BrowserRouter>
   </Provider>

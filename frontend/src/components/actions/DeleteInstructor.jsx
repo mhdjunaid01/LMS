@@ -10,7 +10,7 @@ const handleDeleteInstructor = async (item, instructors, setInstructors) => {
     const response = await axiosInstance.delete(`/instructor/deleteInstructor/${item._id}`);
 
     if (response.data.success) {
-      setInstructors(instructors.filter((inst) => inst._id !== item._id));
+      setInstructors(instrucbtors.filter((inst) => inst._id !== item._id));
     } else {
       throw new Error(`Delete request failed: ${response.data.message}`);
     }

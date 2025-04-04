@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axiosInstance from "@/utils/axiosInstance";
-
+import { toast } from "sonner";
 // Create Context
 const InstructorContext = createContext();
-
 
 export const useInstructorContext = () => useContext(InstructorContext);
 
@@ -31,6 +30,24 @@ export const InstructorProvider = ({ children }) => {
     fetchInstructors();
   }, []);
 
+  const scheduleLiveClass = async (classData) => {
+    try {
+      setLoading(true);
+      console.log("classData",classData);
+      const response = await axiosInstance.post("/live-classes/schedule",classData);
+      toast.success("🎓 Live class scheduled successfully!");
+      return response.data; 
+    } catch (error) {
+      toast.error(
+        "❌ Error scheduling class: " +
+          (error.response?.data?.message || error.message)
+      );
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <InstructorContext.Provider
       value={{
@@ -38,6 +55,7 @@ export const InstructorProvider = ({ children }) => {
         setInstructors,
         loading,
         error,
+        scheduleLiveClass,
       }}
     >
       {children}

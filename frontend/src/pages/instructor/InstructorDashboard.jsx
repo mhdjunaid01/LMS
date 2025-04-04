@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import AdminTabs from "@/components/admin-view/adminTabs";
+import NavTabs from "@/components/admin-view/Tabs";
 import MobileNavbar from "@/components/admin-view/MobileNavbar";
 import Sidebar from "@/components/admin-view/SideBar";
 import { AuthContext } from "@/context/AuthContext";
@@ -15,7 +15,7 @@ const InstructorDashboard = () => {
       <MobileNavbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        handleLogout={handleLogout}
+        handlLogout={handleLogout}
         role={userRole} // Pass role to MobileNavbar
       />
       <Sidebar
@@ -27,7 +27,7 @@ const InstructorDashboard = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-4 md:p-8 overflow-y-auto">
-        <AdminTabs activeTab={activeTab} setActiveTab={setActiveTab} role={userRole} />
+        <NavTabs activeTab={activeTab} setActiveTab={setActiveTab} role={userRole} />
       </main>
     </div>
   );
