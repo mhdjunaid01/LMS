@@ -33,51 +33,43 @@ const StudentList = ({ students, handleAttendanceSubmit }) => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Mark Attendance</CardTitle>
+    <Card className="shadow-lg border rounded-lg">
+      <CardHeader className="bg-gray-100 p-4 rounded-t-lg">
+        <CardTitle className="text-xl font-semibold text-gray-800">Mark Attendance</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-6">
         {students.length === 0 ? (
-          <p className="text-muted-foreground text-center">No students found.</p>
+          <p className="text-muted-foreground text-center text-lg">No students found.</p>
         ) : (
           <>
-            <div className="space-y-4">
+            <div className="space-y-6">
               {students.map((student) => (
                 <div 
                   key={student.id} 
-                  className="flex justify-between items-center border-b pb-2"
+                  className="flex justify-between items-center border-b pb-4"
                 >
-                  <span className="text-lg font-medium">{student.userName}</span>
+                  <span className="text-lg font-medium text-gray-700">{student.userName}</span>
 
                   <div className="space-x-4 flex items-center">
-                    <Label 
-                      className="flex items-center space-x-2 cursor-pointer"
+                    <Button
+                      variant={attendanceData[student.id] === 'present' ? 'default' : 'outline'}
+                      onClick={() => handleAttendanceChange(student.id, 'present')}
+                      className={`${
+                        attendanceData[student.id] === 'present' ? 'bg-green-500 text-white' : 'text-gray-600'
+                      }`}
                     >
-                      <input
-                        type="radio"
-                        name={`attendance-${student.id}`}
-                        value="present"
-                        onChange={() => handleAttendanceChange(student.id, 'present')}
-                        checked={attendanceData[student.id] === 'present'}
-                        className="form-radio"
-                      />
-                      <span>Present</span>
-                    </Label>
+                      Present
+                    </Button>
 
-                    <Label 
-                      className="flex items-center space-x-2 cursor-pointer"
+                    <Button
+                      variant={attendanceData[student.id] === 'absent' ? 'default' : 'outline'}
+                      onClick={() => handleAttendanceChange(student.id, 'absent')}
+                      className={`${
+                        attendanceData[student.id] === 'absent' ? 'bg-red-500 text-white' : 'text-gray-600'
+                      }`}
                     >
-                      <input
-                        type="radio"
-                        name={`attendance-${student.id}`}
-                        value="absent"
-                        onChange={() => handleAttendanceChange(student.id, 'absent')}
-                        checked={attendanceData[student.id] === 'absent'}
-                        className="form-radio"
-                      />
-                      <span>Absent</span>
-                    </Label>
+                      Absent
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -87,8 +79,9 @@ const StudentList = ({ students, handleAttendanceSubmit }) => {
               <Button
                 onClick={handleSubmit}
                 disabled={!isAllMarked}
-                className="w-full mt-4"
-                variant={isAllMarked ? 'default' : 'secondary'}
+                className={`w-full mt-6 py-3 text-lg font-semibold ${
+                  isAllMarked ? 'bg-gray-500 text-white hover:bg-gray-600' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
               >
                 {isAllMarked ? 'Submit Attendance' : 'Please mark attendance for all students'}
               </Button>

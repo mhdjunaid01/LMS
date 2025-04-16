@@ -68,7 +68,11 @@ const ManagementTable = ({ title, columns, data, columnMapping, onDelete, onSave
                 {columns.map((col, index) => (
                   <TableHead key={index}>{col}</TableHead>
                 ))}
+                {
+                  hideEdit !== true && hideDelete !== true ? 
                 <TableHead className="text-right">Actions</TableHead>
+                :null
+                }
               </TableRow>
             </TableHeader>
             <TableBody>

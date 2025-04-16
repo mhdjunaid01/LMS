@@ -6,7 +6,7 @@ import { useEffect, useState, useCallback } from 'react';
 import axiosInstance from '@/utils/axiosInstance';
 import { attendanceForm, InitialAttendanceFormData } from '@/config/customForms';
 import { checkAttendanceFormIsValid } from '@/utils/attendanceUtil';
-import { getStudents, setIsLoading, setError } from '@/redux/attendanceSlice/attendanceSlice';
+import { getStudents, setIsLoading, setError } from '@/redux/Slice/attendanceSlice';
 import StudentList from './StudentList';
 
 const AttendanceManagement = () => {
@@ -39,7 +39,7 @@ const AttendanceManagement = () => {
   useEffect(() => {
     console.log('Courses:', courses);
     console.log('Batch:', batch);
-  }, [courses, batch]);
+  }, [courses, batch]);   
 
   const formControls = attendanceForm(courses || [], batch || []);
 
@@ -91,7 +91,8 @@ const AttendanceManagement = () => {
           buttonText={"Submit"}
           formData={attendanceFormData}
           setFormData={setAttendanceFormData}
-          isButtonDisabled={!checkAttendanceFormIsValid(attendanceFormData)}
+          isButtonDisabled={"hide"}
+
         />
         {renderContent() || (students.length > 0 && (
           <StudentList students={students} handleAttendanceSubmit={handleAttendanceSubmit} />

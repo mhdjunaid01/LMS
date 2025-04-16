@@ -5,7 +5,7 @@ import { scheduleLiveClass, getUpcomingClasses } from "../controllers/liveClassC
 const router = express.Router();
 
 router.post("/schedule", verifyToken, checkRole(["instructor"]), scheduleLiveClass);
-router.get("/upcoming", verifyToken,checkRole(["student"]), getUpcomingClasses);
+router.get("/upcoming", verifyToken,checkRole(["student","instructor"]), getUpcomingClasses);
 
 
 export default router;

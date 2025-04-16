@@ -1,6 +1,10 @@
 import Batch from "../models/Batch.js";
 import Attendance from "../models/Attendance.js";
+import { getAttendanceReportForAllStudents } from "../service/attendanceService.js";
+import mongoose from "mongoose";
 
+
+const MIN_ATTENDANCE_PERCENTAGE = 75;
 
 
 // Fetch students for attendance marking
@@ -98,4 +102,81 @@ const getAttendanceReport = async (req, res) => {
   }
 };
 
-export { getStudentsForAttendance, submitAttendance, getAttendanceReport };
+ const getBatchAttendanceReport = async (req, res) => {
+  try {
+    const { courseId, batchId } = req.params;
+console.log(  "courseId:", courseId, "batchId:", batchId);
+
+    if (!courseId || !batchId) {
+      return res.status(400).json({ message: "courseId and batchId are required" });
+    }
+
+    const report = await getAttendanceReportForAllStudents(courseId, batchId);
+
+    if (!report.length) {
+      return res.status(404).json({ message: "No attendance data found" });
+    }
+
+    res.status(200).json(report);
+  } catch (error) {
+    console.error("Error generating attendance report:", error);
+    res.status(500).json({ message: "Failed to fetch attendance report" });
+  }
+};
+
+const getStudentWeeklyAttendance = async (req, res) => {
+  console.log("Attendance report function loaded");
+
+  try {
+    const { studentId } = req.params;
+    console.log("studentId:", studentId);
+
+    if (!studentId) {
+      return res.status(400).json({ message: "studentId is required" });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(studentId)) {
+      return res.status(400).json({ message: "Invalid studentId" });
+    }
+
+    const result = await Attendance.aggregate([
+      {
+        $match: {
+          "records.student": new mongoose.Types.ObjectId(studentId),
+        },
+      },
+      { $addFields: { week: { $isoWeek: "$date" } } },
+      { $unwind: "$records" },
+      {
+        $match: {
+          "records.student": new mongoose.Types.ObjectId(studentId),
+        },
+      },
+      {
+        $group: {
+          _id: "$week",
+          present: {
+            $sum: { $cond: [{ $eq: ["$records.status", "present"] }, 1, 0] },
+          },
+          absent: {
+            $sum: { $cond: [{ $eq: ["$records.status", "absent"] }, 1, 0] },
+          },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    const formatted = result.map((entry, idx) => ({
+      week: `Week ${idx + 1}`,
+      present: entry.present,
+      absent: entry.absent,
+    }));
+
+    res.status(200).json({ success: true, data: formatted });
+  } catch (err) {
+    console.error("Error in getStudentWeeklyAttendance:", err);
+    res.status(500).json({ message: "Server Error", error: err.message });
+  }
+};
+
+export { getStudentsForAttendance, submitAttendance, getAttendanceReport , getBatchAttendanceReport ,getStudentWeeklyAttendance };

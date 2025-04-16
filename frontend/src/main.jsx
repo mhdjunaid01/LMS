@@ -8,8 +8,8 @@ import { StudentProvider } from "./context/StudentContext";
 import { BatchProvider } from "./context/BatchContext";
 import { CourseProvider } from "./context/CourseContext";
 import { EnrollmentProvider } from "./context/EnrollmentContext";
-import { NotificationProvider } from "./context/NotificationContext";
-import { ScheduleProvider } from "./context/ScheduleContext";
+// import { NotificationProvider } from "./context/NotificationContext";
+// import { ScheduleProvider } from "./context/ScheduleContext";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 createRoot(document.getElementById("root")).render(
@@ -17,8 +17,8 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <AuthProvider>
           <InstructorProvider>
-            <ScheduleProvider>
-        <NotificationProvider>
+            {/* <ScheduleProvider> */}
+        {/* <NotificationProvider> */}
               <StudentProvider>
                 <EnrollmentProvider>
                   <CourseProvider>
@@ -28,8 +28,8 @@ createRoot(document.getElementById("root")).render(
                   </CourseProvider>
                 </EnrollmentProvider>
               </StudentProvider>
-        </NotificationProvider>
-            </ScheduleProvider>
+        {/* </NotificationProvider> */}
+            {/* </ScheduleProvider> */}
           </InstructorProvider>
       </AuthProvider>
     </BrowserRouter>

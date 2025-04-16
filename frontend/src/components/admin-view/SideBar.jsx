@@ -6,7 +6,7 @@ const Sidebar = ({ activeTab, setActiveTab, handleLogout, role }) => {
   const filteredMenuItems = getFilteredMenuItems(role); 
 
   return (
-    <aside className="w-64 bg-white shadow-md hidden md:block">
+    <aside className="w-64 bg-white shadow-md hidden md:block sticky top-0 h-screen overflow-y-auto">
       <div className="p-4">
         <h2 className="text-2xl font-bold mb-4">
           {role === "admin"

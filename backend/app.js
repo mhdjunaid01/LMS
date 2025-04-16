@@ -19,7 +19,8 @@ import InstructorRoute from './routes/instructorRoute.js'
 import studentRoute from './routes/studentRoute.js'
 import LiveClassAndNotificationRoute from './routes/LiveClassAndNotificationRoute.js'
 import notificationRoutes from "./routes/notificationRoutes.js";
-
+import chatRoutes from "./routes/chatGptRoute.js";
+import deepSeekRoute from "./routes/deepSeekRoute.js";
 dotenv.config();
 
 const app = express();
@@ -53,8 +54,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-javascript
-Copy
 // In your main server file (where you have io.on('connection'))
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
@@ -81,7 +80,8 @@ app.use('/instructor',InstructorRoute)
 app.use('/student',studentRoute)
 app.use('/live-classes',LiveClassAndNotificationRoute)
 app.use("/notifications", notificationRoutes);
-
+app.use('/openai', chatRoutes);
+app.use('/deepseek', deepSeekRoute);
 // Error handling middleware
 app.use(errorHandler);
 

@@ -1,20 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const attendanceSlice = createSlice({
+const attendanceSlice = createSlice({
   name: "attendanceData",
   initialState: {
     students: [],
     attendanceRecords: {},
+    attendanceReport: [],
     isLoading: false,
     error: null,
   },
   reducers: {
-
     getStudents: (state, action) => {
       state.students = action.payload;
     },
     getAttendanceRecords: (state, action) => {
       state.attendanceRecords = action.payload;
+    },
+    getAttendanceReport: (state, action) => {
+      state.attendanceReport = action.payload;
     },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -28,6 +31,7 @@ export const attendanceSlice = createSlice({
 export const {
   getStudents,
   getAttendanceRecords,
+  getAttendanceReport,
   setIsLoading,
   setError,
 } = attendanceSlice.actions;

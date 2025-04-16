@@ -1,60 +1,63 @@
-import React, { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+import { setLiveClassData } from "@/redux/Slice/scheduleSlice.js"; 
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import CommonForm from "../common/CommonForm";
-import { initialLiveClassFormData, liveClassFormControl } from "../../config/customForms";
-import { useInstructorContext } from "@/context/InstructorContext";
-import { useNotificationContext } from "@/context/NotificationContext";
-import { liveClassSchema } from "../../services/schemasZod.js";
+import {  liveClassFormControl } from "../../config/customForms";
+import { useDispatch, useSelector } from "react-redux";
 import { useCourseContext } from "@/context/CourseContext";
 import { useBatchContext } from "@/context/BatchContext";
+import { scheduleLiveClassAction } from "@/redux/Action/scheduleClassAction.js";
+import { fetchNotificationCount, sendNotification } from "@/redux/Action/notificationActions.js";
+import { liveClassSchema } from "@/services/schemasZod";
+import { useEffect } from "react";
 
 const ScheduleClass = () => {
+  const dispatch = useDispatch();
   const { courses } = useCourseContext();
   const { batch } = useBatchContext();
-  const [liveClassData, setLiveClassData] = useState({initialLiveClassFormData});
-  const { scheduleLiveClass } = useInstructorContext();
-  const { sendNotification } = useNotificationContext();
-  const { setUpdateTrigger } = useScheduleContext(); 
+  const { liveClassData, isScheduled } = useSelector((state) => state.scheduleClass);
+console.log(liveClassData, "liveClassData");
+
+  useEffect(() => {
+    if (isScheduled) {
+      dispatch(fetchNotificationCount());
+    }
+  }, [isScheduled, dispatch]);
 
   const handleScheduleClass = async (e) => {
     e.preventDefault();
     try {
-      const response = await scheduleLiveClass(liveClassData);
-      if (response?.liveClassId) {
-        sendNotification({
-          message: `New Live Class Scheduled: ${liveClassData.title}`,
-          liveClassId: response.liveClassId,
-        });
+      const result = await dispatch(scheduleLiveClassAction(liveClassData));
+      console.log(result, "result");
+      console.log( result.payload?.liveClassId, "result.payload?.liveClassId");
+      
+      
+      if (result.payload?.liveClassId) {
+        dispatch(sendNotification({
+          message: `New Live Class: ${liveClassData.title}`,
+          liveClassId: result.payload.liveClassId
+        }));
       }
-      setUpdateTrigger((prev) => !prev); 
     } catch (error) {
-      console.error("Error scheduling class:", error);
+      console.error("Scheduling failed:", error);
     }
   };
-  
+
   return (
-    <div className="p-6 space-y-6">
-      <Card className="p-4">
-        <CardHeader>
-          <CardTitle>Schedule a Live Class</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <CommonForm
-            formControls={liveClassFormControl(courses, batch)}
-            formData={liveClassData}
-            setFormData={setLiveClassData}
-            buttonText="Schedule Class"
-            handleSubmit={handleScheduleClass}
-            validationSchema={liveClassSchema}
-          />
-        </CardContent>
-      </Card>
-    </div>
+    <Card className="m-4">
+      <CardHeader>
+        <CardTitle>Schedule New Live Class</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CommonForm
+          formControls={liveClassFormControl(courses, batch)}
+          formData={liveClassData}
+          setFormData={(data) => dispatch(setLiveClassData(data))}
+          buttonText="Schedule Class"
+          handleSubmit={handleScheduleClass}
+          validationSchema={liveClassSchema}
+        />
+      </CardContent>
+    </Card>
   );
 };
 

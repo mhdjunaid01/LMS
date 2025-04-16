@@ -17,8 +17,8 @@ const RouteGuard = ({ element, authenticated, user }) => {
   // Redirect unauthenticated users to /auth
   if (!authenticated && !location.pathname.includes("/auth")) {
     return <Navigate to="/auth" />;
-  }
-
+  } 
+  
   // Redirect authenticated users away from /auth to their respective dashboards
   if (authenticated && location.pathname.includes("/auth")) {
     if (user?.role === "admin") {

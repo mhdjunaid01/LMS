@@ -29,6 +29,7 @@ const Profile = () => {
             columnMapping={columnMapping}
             onSave={(updatedData) => console.log("Updated Data:", updatedData)}
             hideDelete={true}
+            hideEdit={true}
           />
         </CardContent>
       </Card>

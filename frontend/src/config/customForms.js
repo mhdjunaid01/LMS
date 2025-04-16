@@ -1,4 +1,3 @@
-
 export const signInFormControls = [
   {
     name: "email",
@@ -51,8 +50,8 @@ export const signUpFormControls = [
 ];
 export const InitialBatchFormData = {
   batchName: "",
-  courseId: "", 
-  instructorId: "", 
+  courseId: "",
+  instructorId: "",
   startDate: "",
   endDate: "",
 };
@@ -71,8 +70,8 @@ export const batchFormControls = (courses, instructors) => [
     type: "select",
     componentType: "select",
     options: courses.map((course) => ({
-      label: course.title, 
-      value: course._id, 
+      label: course.title,
+      value: course._id,
     })),
   },
   {
@@ -82,7 +81,7 @@ export const batchFormControls = (courses, instructors) => [
     type: "select",
     componentType: "select",
     options: instructors.map((instructor) => ({
-      label: instructor.userName, 
+      label: instructor.userName,
       value: instructor._id,
     })),
   },
@@ -133,11 +132,12 @@ export const courseFormControl = (instructors) => [
 export const InitialAttendanceFormData = {
   courseId: "",
   batchId: "",
-  date: new Date().toISOString().split('T')[0], 
-}
-export const attendanceForm =(courses,batch)=>[
+  date: new Date().toISOString().split("T")[0],
+};
+
+export const attendanceForm = (courses, batch) => [
   {
-    name:"courseId",
+    name: "courseId",
     label: "Title",
     placeholder: "Select Course",
     type: "select",
@@ -145,55 +145,6 @@ export const attendanceForm =(courses,batch)=>[
     options: courses.map((item) => ({
       label: item.title,
       value: item._id,
-      })),
-  },
-  {
-    name:"batchId",
-    label: "Batch Name",
-    placeholder: "Select Batch",
-    type: "select",
-    componentType: "select",
-    options:batch.map((item) => ({
-      label: item.batchName, 
-      value: item._id,
-      })),
-  },
-  {
-    name: "date",
-    label: "Date",
-    placeholder: "Select Date",
-    type: "date",
-    componentType: "input",
-  },
-];
-
-export const initialEnrollFormData={
-studentId:"",
-  courseId:"",
-  batchId:"", 
-}
-
-export const enrollFormControls = (unEnrolledStudents,courses, batch) => [
-  {
-    name: "studentId",
-    label: "User Name ",
-    placeholder: "Select  Student",
-    type: "select",
-    componentType: "select",
-    options:unEnrolledStudents.map((item)=>({
-      label:item.userName,
-      value:item._id
-    }))
-  },
-  {
-    name: "courseId",
-    label: "Course Name",
-    placeholder: "Select Course",
-    type: "select",
-    componentType: "select",
-    options: courses.map((course) => ({
-      label: course.title, 
-      value: course._id, 
     })),
   },
   {
@@ -203,7 +154,85 @@ export const enrollFormControls = (unEnrolledStudents,courses, batch) => [
     type: "select",
     componentType: "select",
     options: batch.map((item) => ({
-      label: item.batchName, 
+      label: item.batchName,
+      value: item._id,
+    })),
+  },
+  {
+    name: "date",
+    label: "Date",
+    placeholder: "Select Date",
+    type: "date",
+    componentType: "input",
+  },
+];
+export const InitialAttendanceReportFormControls = {
+  courseId: "",
+  batchId: "",
+};
+
+export const attendanceReportFormControls = (courses, batch) => [
+  {
+    name: "courseId",
+    label: "course Name",
+    placeholder: "SelectCourse",
+    type: "select",
+    componentType: "select",
+    options: courses.map((item) => ({
+      label: item.title,
+      value: item._id,
+    })),
+  },
+  {
+    name: "batchId",
+    label: "Batch Name",
+    placeholder: "Select Batch",
+    type: "select",
+    componentType: "select",
+    options: batch.map((item) => ({
+      label: item.batchName,
+      value: item._id,
+    })),
+  },
+];
+
+export const initialEnrollFormData = {
+  studentId: "",
+  courseId: "",
+  batchId: "",
+};
+
+export const enrollFormControls = (unEnrolledStudents, courses, batch) => [
+  {
+    name: "studentId",
+    label: "User Name ",
+    placeholder: "Select  Student",
+    type: "select",
+    componentType: "select",
+    options: unEnrolledStudents.map((item) => ({
+      label: item.userName,
+      value: item._id,
+    })),
+  },
+  {
+    name: "courseId",
+    label: "Course Name",
+    placeholder: "Select Course",
+    type: "select",
+    componentType: "select",
+    options: courses.map((course) => ({
+      label: course.title,
+      value: course._id,
+    })),
+  },
+  {
+    name: "batchId",
+    label: "Batch Name",
+    placeholder: "Select Batch",
+    type: "select",
+    componentType: "select",
+    options: batch.map((item) => ({
+      label: item.batchName,
       value: item._id,
     })),
   },
@@ -216,7 +245,7 @@ export const initialLiveClassFormData = {
   meetingLink: "",
 };
 
-export const liveClassFormControl = (courses = [],batch) => [
+export const liveClassFormControl = (courses = [], batch) => [
   {
     name: "title",
     label: "Class Title",
@@ -245,8 +274,9 @@ export const liveClassFormControl = (courses = [],batch) => [
     options: batch.map((b) => ({
       value: b._id,
       label: b.batchName,
-    })), 
-  }, {
+    })),
+  },
+  {
     name: "courseId",
     label: "Course",
     componentType: "select",

@@ -9,7 +9,7 @@ export const StudentProvider = ({ children }) => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+ 
   // Fetch students
   const fetchEnrolledStudents = async () => {
     setLoading(true);
@@ -23,8 +23,8 @@ console.log(response.data.enrolledStudents);
       ) {
         const formattedStudents = response.data.enrolledStudents.map((entry) => ({
           _id: entry._id, // Enrollment ID
-          studentId: entry.studentId?._id || "",  // Store studentId for deletion
-          courseName: entry.courseId?.title || "",         // Store courseId for deletion
+          studentId: entry.studentId?._id || "", 
+          courseName: entry.courseId?.title || "",  
           batchName: entry.batchId?.batchName|| "",
           courseId: entry.courseId?._id || "", 
           batchId: entry.batchId?._id|| "",
@@ -47,6 +47,7 @@ console.log(formattedStudents);
     }
   };
 
+  
   useEffect(() => {
     fetchEnrolledStudents();
   }, []);

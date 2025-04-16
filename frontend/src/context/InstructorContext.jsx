@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "sonner";
+
 // Create Context
 const InstructorContext = createContext();
 
@@ -30,13 +31,14 @@ export const InstructorProvider = ({ children }) => {
     fetchInstructors();
   }, []);
 
-  const scheduleLiveClass = async (classData) => {
+  // Memoize the scheduleLiveClass function to prevent re-creation on every render
+  const scheduleLiveClass = useCallback(async (classData) => {
     try {
       setLoading(true);
-      console.log("classData",classData);
-      const response = await axiosInstance.post("/live-classes/schedule",classData);
+      console.log("classData", classData);
+      const response = await axiosInstance.post("/live-classes/schedule", classData);
       toast.success("🎓 Live class scheduled successfully!");
-      return response.data; 
+      return response.data;
     } catch (error) {
       toast.error(
         "❌ Error scheduling class: " +
@@ -46,18 +48,20 @@ export const InstructorProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+    
+  }, []);
+
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    instructors,
+    setInstructors,
+    loading,
+    error,
+    scheduleLiveClass,
+  }), [instructors, loading, error, scheduleLiveClass]);
 
   return (
-    <InstructorContext.Provider
-      value={{
-        instructors,
-        setInstructors,
-        loading,
-        error,
-        scheduleLiveClass,
-      }}
-    >
+    <InstructorContext.Provider value={contextValue}>
       {children}
     </InstructorContext.Provider>
   );

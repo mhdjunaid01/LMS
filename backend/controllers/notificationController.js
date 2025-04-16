@@ -1,8 +1,14 @@
 import Notification from "../models/Notification.js";
 import LiveClass from "../models/LiveClass.js";
 
-export const sendLiveClassNotifications = async (liveClassId) => {
+export const sendNotifications = async (req, res) => {
   try {
+    const { liveClassId } = req.body;
+    if (!liveClassId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Live Class ID is required" });
+    }
     const liveClass = await LiveClass.findById(liveClassId).populate(
       "enrolledStudents"
     );
@@ -15,8 +21,19 @@ export const sendLiveClassNotifications = async (liveClassId) => {
       liveClass: liveClass._id,
     }));
     await Notification.insertMany(notifications);
+    res.status(200).json({
+      success: true,
+      message: "Notifications sent successfully",
+      notifications,
+    });
   } catch (error) {
-    console.error("Error sending notifications:", error);
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Error sending notifications",
+        error: error.message,
+      });
   }
 };
 
@@ -70,18 +87,5 @@ export const markNotificationsAsRead = async (req, res) => {
   } catch (error) {
     console.error("Error marking notifications as read:", error);
     res.status(500).json({ message: "Server error" });
-  }
-};
-
-export const sendNotifications =async (req, res) => {
-  try {
-    const { liveClassId } = req.body;
-    if (!liveClassId) {
-      return res.status(400).json({ success: false, message: "Live Class ID is required" });
-    } 
-    await sendLiveClassNotifications(liveClassId);
-    res.status(200).json({ success: true, message: "Notifications sent successfully" });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Error sending notifications", error: error.message });
   }
 };

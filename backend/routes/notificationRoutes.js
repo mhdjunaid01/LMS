@@ -9,9 +9,9 @@ import { checkRole, verifyToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/send", sendNotifications);
-router.get("/count", verifyToken,checkRole(["student"]), getUnreadNotificationCount);
-router.get("/getAllNotification",verifyToken,checkRole(["student"]), getNotifications);
-router.delete("/mark-read/:id", markNotificationsAsRead);
+router.post("/send", verifyToken, sendNotifications);
+router.get("/count", verifyToken, getUnreadNotificationCount);
+router.get("/getAllNotification",verifyToken, getNotifications);
+router.delete("/mark-read/:id",verifyToken, markNotificationsAsRead);
 
 export default router;

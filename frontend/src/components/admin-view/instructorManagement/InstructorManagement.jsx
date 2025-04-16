@@ -10,24 +10,25 @@ const InstructorManagement = () => {
   const [loading, setLoading] = useState(false);
 
   const columns = ["UserName", "Email", "Role"];
+
   const columnMapping = {
     UserName: "userName",
     Email: "email",
     Role: "role",
   };
 
+  
 
   useEffect(() => {
     const fetchInstructors = async () => {
       setLoading(true);
       try {
         const response = await axiosInstance.get("/instructor/getInstructor");
-        console.log("API Response:", response.data); // Debugging
-  
+        console.log("API Response:", response.data); 
         if (response.data.success && Array.isArray(response.data.instructors)) {
           const formattedInstructors = response.data.instructors.map((entry) => ({
             _id: entry._id,
-            userName: entry.userName || "N/A", // Remove instructorId reference
+            userName: entry.userName || "N/A", 
             email: entry.email || "N/A",
             role: entry.role || "N/A",
           }));

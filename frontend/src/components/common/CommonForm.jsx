@@ -10,7 +10,7 @@ const CommenForm = ({
   formData,
   setFormData,
   isButtonDisabled = false,
-  validationSchema // Add validationSchema prop
+  validationSchema, // Add validationSchema prop
 }) => {
   const [errors, setErrors] = useState({});
 
@@ -22,7 +22,7 @@ const CommenForm = ({
     } catch (error) {
       if (error.errors) {
         const newErrors = {};
-        error.errors.forEach(err => {
+        error.errors.forEach((err) => {
           newErrors[err.path[0]] = err.message;
         });
         setErrors(newErrors);
@@ -32,7 +32,7 @@ const CommenForm = ({
   };
 
   const handleFormSubmit = (e) => {
-    if(e)e.preventDefault();
+    if (e) e.preventDefault();
     if (validateForm()) {
       handleSubmit(e);
     }
@@ -50,13 +50,15 @@ const CommenForm = ({
           />
         </div>
       ))}
-      <Button
-        disabled={isButtonDisabled}
-        type="submit"
-        className={"mt-5 w-full"}
-      >
-        {buttonText || "Submit"}
-      </Button>
+      {isButtonDisabled === "hide" ? null : (
+        <Button
+          disabled={isButtonDisabled}
+          type="submit"
+          className={"mt-5 w-full"}
+        >
+          {buttonText || "Submit"}
+        </Button>
+      )}
     </form>
   );
 };

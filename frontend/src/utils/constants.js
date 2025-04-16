@@ -1,17 +1,17 @@
 import {
-  Award,
   BarChart,
-
   Book,
   BookUp2,
+  Bot,
+  BotIcon,
   CalendarCheck,
   CalendarDays,
+  CheckSquareIcon,
   Clock,
   FileUp,
   FolderCog,
   Group,
   LogOut,
-  MessageCircle,
   PlaySquare,
   School,
   Timer,
@@ -19,7 +19,7 @@ import {
   UserRoundPlus,
 } from "lucide-react";
 import AdminDashboardPage from "@/components/admin-view/AdminDashboardPage";
-import AttendanceManagement from "@/components/common/attendance-management.jsx/AttendanceManagement";
+import AttendanceManagement from "@/components/common/attendance-management/AttendanceManagement";
 import BatchManagement from "@/components/common/batch-management/BatchManagement";
 import CourseManagement from "@/components/common/course-management/CourseManagement";
 import InstructorManagement from "@/components/admin-view/instructorManagement/InstructorManagement";
@@ -30,8 +30,8 @@ import AddBatch from "@/components/common/batch-management/AddBatch";
 import AddCourse from "@/components/common/course-management/AddCourse";
 import EnrollStudents from "@/components/common//studentManagement/EnrollStudents";
 import Profile from "@/components/student-view/Profile";
-import Certificates from "@/components/student-view/Certificates";
-import FeedBack from "@/components/student-view/FeedBack";
+import ChatBot from "@/components/student-view/ChatBot";
+import DeepSeek from "@/components/student-view/DeepSeek";
 import Notifications from "@/components/student-view/Notifications";
 import Schedule from "@/components/student-view/Schedule";
 import Assignments from "@/components/student-view/Assignments";
@@ -39,8 +39,8 @@ import Attendance from "@/components/student-view/Attendance";
 import CourseContent from "@/components/student-view/CourseContent";
 import MyCourses from "@/components/student-view/MyCourses";
 import NotificationsTab from "@/components/student-view/NotificationsTab";
-
 import ScheduleClass from "@/components/instructor-view/ScheduleClass";
+import AttendanceReport from "@/components/common/attendance-management/AttendanceReport";
 export const menuItems = [
   {
     icon: BarChart,
@@ -106,6 +106,13 @@ export const menuItems = [
     roles: ["instructor"],
   },
   {
+    icon: CheckSquareIcon,
+    label: "Attendance Report",
+    value: "attendanceReport",
+    component: AttendanceReport,
+    roles: ["instructor","admin"],
+  },
+  {
     icon: Timer,
     label: "Schedule Live Class",
     value: "ScheduleLiveClass",
@@ -117,7 +124,7 @@ export const menuItems = [
     label: "Instructor Management",
     value: "instructorManagement",
     component: InstructorManagement,
-    roles: ["admin"], // Only Admin
+    roles: ["admin"], 
   },
   {
     icon:User,
@@ -126,20 +133,20 @@ export const menuItems = [
     component:Profile,
     roles: ["student"], 
   },
-  {
-    icon: Book,
-    label: "My Courses ",
-    value: "myCourses",
-    component:MyCourses,
-    roles: ["student"], 
-  },
-  {
-    icon: PlaySquare,
-    label: "Course Content ",
-    value: "courseContent",
-    component:CourseContent,
-    roles: ["student"], 
-  },
+  // {
+  //   icon: Book,
+  //   label: "My Courses ",
+  //   value: "myCourses",
+  //   component:MyCourses,
+  //   roles: ["student"], 
+  // },
+  // {
+  //   icon: PlaySquare,
+  //   label: "Course Content ",
+  //   value: "courseContent",
+  //   component:CourseContent,
+  //   roles: ["student"], 
+  // },
   {
     icon: CalendarCheck,
     label: "Attendance ",
@@ -147,13 +154,13 @@ export const menuItems = [
     component:Attendance,
     roles: ["student"], 
   },
-  {
-    icon: FileUp,
-    label: "Assignments ",
-    value: "assignments",
-    component:Assignments,
-    roles: ["student"], 
-  },
+  // {
+  //   icon: FileUp,
+  //   label: "Assignments ",
+  //   value: "assignments",
+  //   component:Assignments,
+  //   roles: ["student"], 
+  // },
   {
     icon: Clock,
     label: "Schedule ",
@@ -170,18 +177,18 @@ export const menuItems = [
   },
   
   {
-    icon:MessageCircle,
-    label: "Feedback ",
-    value: "feedback",
-    component:FeedBack,
+    icon:BotIcon,
+    label: "DeepSeek ",
+    value: "DeepSeek",
+    component:DeepSeek,
     roles: ["student"], 
   },
   {
-    icon:Award,
-    label: "Certificates ",
-    value: "certificates",
-    component:Certificates,
-    roles: ["student"], 
+    icon:Bot,
+    label: "ChatBot ",
+    value: "ChatBot",
+    component:ChatBot,
+    roles: ["student","admin","instructor"], 
   },
   {
     icon: FolderCog,

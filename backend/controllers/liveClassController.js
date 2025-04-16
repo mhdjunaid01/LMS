@@ -70,7 +70,7 @@ export const getUpcomingClasses = async (req, res) => {
     const currentTime = new Date();
     
     const oneHourAgo = new Date(currentTime.getTime() - 60 * 60 * 1000);
-     await LiveClass.deleteMany({
+    await LiveClass.deleteMany({
       scheduleTime: { $lte: oneHourAgo },
     });
     const upcomingClasses = await LiveClass.find({ enrolledStudents: userId })

@@ -7,7 +7,9 @@ const NavTabs = ({ activeTab, setActiveTab, role }) => {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-8">Dashboard</h1>
+       <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-8">
+        {activeTab.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}
+      </h1>
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         {filteredMenuItems.map((menuItem) => (
           <TabsContent key={menuItem.value} value={menuItem.value}>
