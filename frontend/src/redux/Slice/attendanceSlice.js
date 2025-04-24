@@ -25,6 +25,10 @@ const attendanceSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+
+    clearStudents: (state) => {
+      state.students = [];
+    },
   },
 });
 
@@ -34,5 +38,7 @@ export const {
   getAttendanceReport,
   setIsLoading,
   setError,
+  clearStudents, 
 } = attendanceSlice.actions;
+
 export default attendanceSlice.reducer;

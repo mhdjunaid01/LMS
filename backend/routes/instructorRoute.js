@@ -5,7 +5,7 @@ import { getInstructor ,deleteInstructor,editIntructor} from '../controllers/ins
 
 const router = express.Router();
 
-router.get('/getInstructor', verifyToken, checkRole(['admin',"instructor"]), getInstructor);
+router.get('/getInstructor', verifyToken, checkRole(['admin',"instructor","student"]), getInstructor);
 router.delete('/deleteInstructor/:id', verifyToken, checkRole(['admin']), deleteInstructor);
 router.put('/editInstructor/:id',verifyToken,checkRole(["admin","instructor"]),editIntructor)
 export default router;

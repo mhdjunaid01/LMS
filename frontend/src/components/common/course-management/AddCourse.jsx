@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import CommenForm from "../CommonForm";
 import { useCourseContext } from "@/context/courseContext";
 import { courseSchema } from "@/services/schemasZod.js";
-
+import { motion } from "framer-motion";
 const AddCourse = () => {
   const { instructors } = useInstructorContext();
   const { courseFormData, setCourseFormData, addNewCourse } = useCourseContext();
@@ -18,7 +18,12 @@ const AddCourse = () => {
 
   return (
 
-
+      <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
+    >
     <Card className="p-6 space-y-4">
       <CardHeader>
         <CardTitle>Add New Course</CardTitle>
@@ -39,7 +44,7 @@ const AddCourse = () => {
         />
       </CardContent>
     </Card>
-   
+   </motion.div>
   );
 };
 

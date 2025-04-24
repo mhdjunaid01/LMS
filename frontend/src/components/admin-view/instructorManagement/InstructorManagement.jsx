@@ -4,6 +4,7 @@ import axiosInstance from "../../../utils/axiosInstance";
 import handleDeleteInstructor from "../../actions/DeleteInstructor";
 import { useInstructorContext } from "@/context/InstructorContext";
 import handleEditInstructor from "@/components/actions/EditInstructor";
+import { motion } from "framer-motion";
 const InstructorManagement = () => {
   const {instructors, setInstructors} = useInstructorContext()
   const [error, setError] = useState(null);
@@ -63,6 +64,12 @@ const InstructorManagement = () => {
   }
 
   return (
+    <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5 }}
+  >
     <ManagementTable
       title="Instructor Management"
       columns={columns}
@@ -72,6 +79,7 @@ const InstructorManagement = () => {
       onSave={handleEdit}
 
     />
+    </motion.div>
   );
 };
 

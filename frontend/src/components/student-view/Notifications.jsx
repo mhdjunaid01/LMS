@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { fetchNotifications, handleReadNotification } from "@/redux/Action/notificationActions.js";
+import { motion } from "framer-motion";
 
 const Notifications = () => {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ const Notifications = () => {
   }, [dispatch]);
 
   const memoizedNotifications = useMemo(() => {
-    return Array.isArray(notifications||[])
+    return Array.isArray(notifications || [])
       ? notifications.map((notification) => ({
           ...notification,
           formattedDate: new Date(notification.createdAt).toLocaleString(),
@@ -33,29 +34,41 @@ const Notifications = () => {
 
       {memoizedNotifications.length > 0 ? (
         memoizedNotifications.map((notification) => (
-          <Card
+          <motion.div
             key={notification._id}
-            className="p-4 transform transition duration-300 hover:scale-105 hover:shadow-lg lg:m-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
           >
-            <CardContent className="space-y-2">
-              <p className="text-sm text-gray-700">{notification.message}</p>
-              <span className="text-xs text-gray-500">{notification.formattedDate}</span>
-              <Button
-                variant="link"
-                className="text-xs text-blue-600 hover:underline"
-                onClick={() => handleRead(notification._id)}
-              >
-                Read
-              </Button>
-            </CardContent>
-          </Card>
+            <Card
+              className="p-4 transform transition duration-300 hover:scale-105 hover:shadow-lg lg:m-10"
+            >
+              <CardContent className="space-y-2">
+                <p className="text-sm text-gray-700">{notification.message}</p>
+                <span className="text-xs text-gray-500">{notification.formattedDate}</span>
+                <Button
+                  variant="link"
+                  className="text-xs text-blue-600 hover:underline"
+                  onClick={() => handleRead(notification._id)}
+                >
+                  Read
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
         ))
       ) : (
         !isLoading && !error && (
-          <div className="flex flex-col items-center justify-center h-full">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col items-center justify-center h-full"
+          >
             <h2 className="text-lg font-semibold">No Notifications</h2>
             <p className="text-gray-500">You have no new notifications.</p>
-          </div>
+          </motion.div>
         )
       )}
     </div>

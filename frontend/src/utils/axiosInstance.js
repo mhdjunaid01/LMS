@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5001/", // Ensure backend is running at this port
+  baseURL: "http://localhost:5001/", 
   withCredentials: true, // Allows sending cookies with requests
 });
 
@@ -13,7 +13,7 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     } else {
-      delete config.headers.Authorization; // Ensure old token is removed if no new one exists
+      delete config.headers.Authorization; 
     }
 
     return config;

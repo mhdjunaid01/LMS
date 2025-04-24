@@ -7,5 +7,4 @@ const router = express.Router();
 router.post("/schedule", verifyToken, checkRole(["instructor"]), scheduleLiveClass);
 router.get("/upcoming", verifyToken,checkRole(["student","instructor"]), getUpcomingClasses);
 
-
 export default router;

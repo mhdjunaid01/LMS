@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axiosInstance from "@/utils/axiosInstance";
 import {
   logInService,
@@ -7,7 +8,8 @@ import {
   registerStudentService,
 } from "@/services/authServices";
 import { initialSignInFormData, initialSignUpFormData } from "@/config/customForms";
-import {toast} from 'sonner'
+import { toast } from "sonner";
+
 export const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
@@ -17,7 +19,8 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authLoading, setAuthLoading] = useState(false);
   const [shouldReload, setShouldReload] = useState(false);
-const [userRole, setUserRole] = useState("");
+  const [userRole, setUserRole] = useState("");
+  const navigate = useNavigate();
   const setAuthenticatedUser = useCallback((user) => {
     setAuth({ authenticate: true, user });
   }, []);
@@ -25,15 +28,14 @@ const [userRole, setUserRole] = useState("");
   const setUnauthenticatedUser = useCallback(() => {
     setAuth({ authenticate: false, user: null });
   }, []);
-  
-//verifyToken
+
+  // verifyToken
   const verifyToken = async () => {
     try {
       const response = await axiosInstance.get("/auth/me");
       if (response.data.success) {
         setAuthenticatedUser(response.data.user);
         setUserRole(response.data.user.role);
-        
       } else {
         setUnauthenticatedUser();
       }
@@ -49,7 +51,7 @@ const [userRole, setUserRole] = useState("");
     verifyToken();
   }, []);
 
-//handleLoginUser
+  // handleLoginUser
   const handleLoginUser = async (event) => {
     event.preventDefault();
     setAuthLoading(true);
@@ -57,12 +59,11 @@ const [userRole, setUserRole] = useState("");
       const data = await logInService(signInFormData);
       if (data?.success) {
         setAuthenticatedUser(data.user);
-
         setShouldReload(true);
         toast.success("User Login successfully!");
       } else {
         setUnauthenticatedUser();
-        toast.error("User Login Failed")
+        toast.error("User Login Failed");
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -73,48 +74,59 @@ const [userRole, setUserRole] = useState("");
   };
 
   // Use useEffect to reload only once
-useEffect(() => {
-  if (shouldReload) {
-    window.location.reload();
-  }
-}, [shouldReload]);
-//handleRegisterInstrutor
-  const handleRegisterInstrutor = useCallback(async (event) => {
-    event.preventDefault();
-    setAuthLoading(true);
-    try {
-      await registerInstructorService(signUpFormData);
-      setSignUpFormData(initialSignUpFormData);
-      toast.success("Instrutor register successfully!");
-    } finally {
-      setAuthLoading(false);
-  
+  useEffect(() => {
+    if (shouldReload) {
+      window.location.reload();
     }
-  }, [signUpFormData]);
+  }, [shouldReload]);
 
-//handleRegisterStudent
-  const handleRegisterStudent = useCallback(async (event) => {
-    event.preventDefault();
-    setAuthLoading(true);
-    try {
-      await registerStudentService(signUpFormData);
-      setSignUpFormData(initialSignUpFormData);
-      toast.success("Student register successfully!");
-    } finally {
-      setAuthLoading(false);
-      
-    }
-  }, [signUpFormData]);
-//removeToken
+  // handleRegisterInstrutor
+  const handleRegisterInstrutor = useCallback(
+    async (event) => {
+      event.preventDefault();
+      setAuthLoading(true);
+      try {
+        await registerInstructorService(signUpFormData);
+        setSignUpFormData(initialSignUpFormData);
+        toast.success("Instrutor register successfully!");
+      } finally {
+        setAuthLoading(false);
+      }
+    },
+    [signUpFormData]
+  );
+
+  // handleRegisterStudent
+  const handleRegisterStudent = useCallback(
+    async (event) => {
+      event.preventDefault();
+      setAuthLoading(true);
+      try {
+        await registerStudentService(signUpFormData);
+        setSignUpFormData(initialSignUpFormData);
+        toast.success("Student register successfully!");
+      } finally {
+        setAuthLoading(false);
+      }
+    },
+    [signUpFormData]
+  );
+
+  // removeToken
   const removeToken = useCallback(async () => {
-    setUnauthenticatedUser();
+    setUnauthenticatedUser(); // Reset auth state
+    setUserRole(""); 
+    setSignInFormData(initialSignInFormData);
+    setSignUpFormData(initialSignUpFormData);
     try {
-      return await logOutService();
+      await logOutService(); // Call logout service
+      toast.success("Logged out successfully!");
     } catch (error) {
       console.error("Error in removeToken:", error);
-      return { success: false, error };
+    } finally {
+      navigate("/auth"); // Redirect to /auth
     }
-  }, [setUnauthenticatedUser]);
+  }, [setUnauthenticatedUser, navigate]);
 
   const contextValue = useMemo(
     () => ({
@@ -131,7 +143,7 @@ useEffect(() => {
       authLoading,
       userRole,
       setUserRole,
-      initialSignUpFormData
+      initialSignUpFormData,
     }),
     [
       signInFormData,
@@ -145,8 +157,7 @@ useEffect(() => {
       removeToken,
       userRole,
       setUserRole,
-      initialSignUpFormData
-      
+      initialSignUpFormData,
     ]
   );
 
@@ -163,6 +174,4 @@ useEffect(() => {
   );
 };
 
-
 export default AuthProvider;
-

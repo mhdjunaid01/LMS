@@ -3,7 +3,7 @@ import ManagementTable from "../../dynamicTable/managementTable";
 import { useStudents } from "@/context/StudentContext";
 import handleDeleteStudent from "@/components/actions/DeleteStudent";
 import { handleEditStudent } from "@/components/actions/EditStudent";
-
+import { motion } from "framer-motion";
 const StudentManagement = () => {
   const { students, setStudents, loading, error } = useStudents();
   const columns = ["UserName", "Email","CourseName","BatchName","Role"];
@@ -43,6 +43,12 @@ const handleEdit = async (updatedItem) => {
 }
 
   return (
+    <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5 }}
+  >
     <ManagementTable
       title="Student Management"
       columns={columns}
@@ -51,6 +57,7 @@ const handleEdit = async (updatedItem) => {
       onDelete={handleDelete}
       onSave={handleEdit}
     />
+  </motion.div>
   );
 };
 

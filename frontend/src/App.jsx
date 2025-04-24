@@ -16,9 +16,7 @@ const App = () => {
     <div>
      
       <Routes>
-        
         <Route path="/" element={<CommenHomePage />} />
-
         <Route
           path="/auth"
           element={
@@ -29,6 +27,7 @@ const App = () => {
             />
           }
         />
+
         <Route
           path="/admin"
           element={
@@ -50,7 +49,7 @@ const App = () => {
             />
           }
         />
-           <Route
+          <Route
           path="/student"
           element={
             <RouteGuard

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAttendanceReport } from "@/redux/Action/attandanceActions";
 import ManagementTable from "@/components/dynamicTable/managementTable";
-
+import { motion } from "framer-motion";
 const AttendanceReportTable = ({ courseId, batchId }) => {
   const dispatch = useDispatch();
 
@@ -45,6 +45,12 @@ console.log("Attendance error:", error);
   if (!isLoading && attendanceReport.length === 0) return <p className="text-center">No attendance data available.</p>;
   if (!attendanceReport) return <p className="text-center">No attendance data available.</p>;
   return (
+    <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5 }}
+  >
     <ManagementTable
       title="Attendance Report"
       columns={columns}
@@ -56,6 +62,7 @@ console.log("Attendance error:", error);
       hideDelete={true}
       hideEdit={true}
     />
+    </motion.div>
   );
 };
 

@@ -4,13 +4,19 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import CommonForm from "../CommonForm";
 import { checkBatchFormIsValid } from "@/utils/batchUtils";
 import { batchSchema } from "@/services/schemasZod";
-
+import { motion } from "framer-motion";
 export default function AddBatch() {
   const { batchFormData, setBatchFormData, courses, instructors, handleAddBatch } = useBatchContext();
   
   const formControls = batchFormControls(courses || [], instructors || []);
 
   return (
+    <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5 }}
+  >
     <Card className="p-6 space-y-4">
       <CardHeader>
         <CardTitle>Add Batch</CardTitle>
@@ -28,5 +34,6 @@ export default function AddBatch() {
         />
       </CardContent>
     </Card>
+    </motion.div>
   );
 }

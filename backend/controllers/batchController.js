@@ -2,56 +2,6 @@ import Batch from "../models/Batch.js";
 import Course from "../models/Course.js";
 import User from "../models/User.js";
 
-// const createBatch = async (req, res) => {
-//   try {
-//     const { batchName, title, instructorName } = req.body;
-//     console.log(req.body);
-    
-//     const startDate = new Date();
-//     const endDate = new Date();
-//     endDate.setMonth(endDate.getMonth() + 3);
-
-//     if (!batchName || !title || !instructorName) {
-//       return res.status(400).json({ message: "Please fill all fields", success: false });
-//     }
-
-//     const course = await Course.findOne({ title });
-//     if (!course) {
-//       return res.status(404).json({ message: "Course not found", success: false });
-//     }
-
-//     const instructor = await User.findOne({ userName: instructorName });
-//     if (!instructor) {
-//       return res.status(404).json({ message: "Instructor not found", success: false });
-//     }
-
-//     const existingBatch = await Batch.findOne({ batchName, courseId: course._id });
-//     if (existingBatch) {
-//       return res.status(400).json({ message: "Batch with this name already exists for this course", success: false });
-//     }
-
-//     console.log("courseId", course._id, "instructorId", instructor._id);
-    
-//     const newBatch = new Batch({
-//       batchName,
-//       courseId: course._id,
-//       instructorId: instructor._id,
-//       startDate,
-//       endDate,
-//     });
-
-//     await newBatch.save();
-
-//     res.status(201).json({
-//       message: "Batch created successfully",
-//       success: true,
-//       batch: newBatch,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: "Internal server error", success: false, error: error.message });
-//   }
-// };
-
 const createBatch = async (req, res) => {
   try {
     const { batchName, courseId, instructorId } = req.body;

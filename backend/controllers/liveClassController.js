@@ -6,7 +6,7 @@ export const scheduleLiveClass = async (req, res) => {
     const { title, courseId, batchId, scheduledTime, meetingLink } = req.body;
     const instructorId = req.user?.id;
     if (!title || !courseId || !scheduledTime || !meetingLink || !batchId) {
-      console.log("❌ Missing required fields:", {
+      console.log(" Missing required fields:", {
         title,
         courseId,
         batchId,

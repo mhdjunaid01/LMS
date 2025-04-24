@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import CommonForm from '../CommonForm';
 import { checkEnrollFormIsValid } from '@/utils/enrollUtils';
 import { enrollSchema } from '@/services/schemasZod.js';
-
+import { motion } from 'framer-motion';
 const EnrollStudents = () => {
 const { enrollFormData, setEnrollFormData, unEnrolledStudents, handleEnrollStudents } = useEnrollmentContext();
 const { courses, batch } = useBatchContext();
@@ -18,6 +18,12 @@ console.log("dddddddddddddddddddd",enrollFormData);
 
 
   return (
+    <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5 }}
+  >
     <Card className="p-6 space-y-4">
       <CardHeader>
         <CardTitle>Enroll Students</CardTitle>
@@ -35,6 +41,7 @@ console.log("dddddddddddddddddddd",enrollFormData);
         />
       </CardContent>
     </Card>
+  </motion.div>
   )
 }
 

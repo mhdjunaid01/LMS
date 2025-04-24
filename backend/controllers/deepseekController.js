@@ -1,8 +1,10 @@
+
 import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
-const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
-const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY 
+
+const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 export const askDeepSeek = async (req, res) => {
   try {
@@ -13,22 +15,24 @@ export const askDeepSeek = async (req, res) => {
     }
 
     const response = await axios.post(
-      DEEPSEEK_API_URL,
+      OPENROUTER_API_URL,
       {
-        model: "deepseek-chat",
+        model: "deepseek/deepseek-r1:free",
         messages: [{ role: "user", content: message }],
       },
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
+          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "https://yourlms.com", // Optional: Replace with your LMS URL
+          "X-Title": "My LMS Chatbot", // Optional: Friendly name shown in OpenRouter
         },
       }
     );
 
     res.json({ reply: response.data.choices[0].message.content });
   } catch (error) {
-    console.error("DeepSeek API error:", error);
-    res.status(500).json({ error: "Failed to fetch response from DeepSeek" });
+    console.error("OpenRouter API error:", error.response?.data || error.message);
+    res.status(500).json({ error: "Failed to fetch response from OpenRouter" });
   }
 };

@@ -8,11 +8,10 @@ import {
   CalendarDays,
   CheckSquareIcon,
   Clock,
-  FileUp,
   FolderCog,
   Group,
   LogOut,
-  PlaySquare,
+  MessageCircle,
   School,
   Timer,
   User,
@@ -34,20 +33,33 @@ import ChatBot from "@/components/student-view/ChatBot";
 import DeepSeek from "@/components/student-view/DeepSeek";
 import Notifications from "@/components/student-view/Notifications";
 import Schedule from "@/components/student-view/Schedule";
-import Assignments from "@/components/student-view/Assignments";
 import Attendance from "@/components/student-view/Attendance";
-import CourseContent from "@/components/student-view/CourseContent";
-import MyCourses from "@/components/student-view/MyCourses";
 import NotificationsTab from "@/components/student-view/NotificationsTab";
 import ScheduleClass from "@/components/instructor-view/ScheduleClass";
 import AttendanceReport from "@/components/common/attendance-management/AttendanceReport";
+import InstructorDashboardPage from "@/components/instructor-view/InstructorDashboardPage";
+import StudentDashBoardPage from "@/components/student-view/StudentDashBoardPage";
 export const menuItems = [
   {
     icon: BarChart,
     label: "Dashboard",
     value: "dashboard",
     component: AdminDashboardPage,
-    roles: ["admin", "instructor"],
+    roles: ["admin"],
+  },
+  {
+    icon: BarChart,
+    label: "Dashboard",
+    value: "dashboard",
+    component: InstructorDashboardPage,
+    roles: ["instructor"],
+  },
+  {
+    icon: BarChart,
+    label: "Dashboard",
+    value: "dashboard",
+    component: StudentDashBoardPage,
+    roles: ["student"],
   },
   {
     icon: UserRoundPlus,
@@ -110,7 +122,7 @@ export const menuItems = [
     label: "Attendance Report",
     value: "attendanceReport",
     component: AttendanceReport,
-    roles: ["instructor","admin"],
+    roles: ["instructor"],
   },
   {
     icon: Timer,
@@ -133,20 +145,6 @@ export const menuItems = [
     component:Profile,
     roles: ["student"], 
   },
-  // {
-  //   icon: Book,
-  //   label: "My Courses ",
-  //   value: "myCourses",
-  //   component:MyCourses,
-  //   roles: ["student"], 
-  // },
-  // {
-  //   icon: PlaySquare,
-  //   label: "Course Content ",
-  //   value: "courseContent",
-  //   component:CourseContent,
-  //   roles: ["student"], 
-  // },
   {
     icon: CalendarCheck,
     label: "Attendance ",
@@ -154,13 +152,7 @@ export const menuItems = [
     component:Attendance,
     roles: ["student"], 
   },
-  // {
-  //   icon: FileUp,
-  //   label: "Assignments ",
-  //   value: "assignments",
-  //   component:Assignments,
-  //   roles: ["student"], 
-  // },
+ 
   {
     icon: Clock,
     label: "Schedule ",
@@ -181,14 +173,14 @@ export const menuItems = [
     label: "DeepSeek ",
     value: "DeepSeek",
     component:DeepSeek,
-    roles: ["student"], 
+    roles: ["student","admin","instructor"], 
   },
   {
-    icon:Bot,
-    label: "ChatBot ",
-    value: "ChatBot",
+    icon:MessageCircle,
+    label: "ChatBox ",
+    value: "ChatBox",
     component:ChatBot,
-    roles: ["student","admin","instructor"], 
+    roles: ["student","instructor"], 
   },
   {
     icon: FolderCog,

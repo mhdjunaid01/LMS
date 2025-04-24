@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useBatchContext } from "@/context/BatchContext";
 import { attendanceReportFormControls, InitialAttendanceReportFormControls } from "@/config/customForms";
 import { fetchAttendanceReport } from "@/redux/Action/attandanceActions";
+import { motion } from "framer-motion";
 const AttendanceReport = () => {
   const [attendanceReportFormData, setAttendanceReportFormData] = useState(InitialAttendanceReportFormControls);
   const { courses, batch } = useBatchContext();
@@ -35,7 +36,12 @@ const AttendanceReport = () => {
     setBatchId(attendanceReportFormData.batchId);
   }
   return (
-  <>
+    <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ duration: 0.5 }}
+  >
     <Card className="p-6 space-y-4">
       <CardHeader>
         <CardTitle>Select Course and Batch to view Attendance Report</CardTitle>
@@ -54,7 +60,7 @@ const AttendanceReport = () => {
       </CardContent>
     </Card>
       {<AttendanceReportTable courseId={courseId} batchId={batchId} />}
-      </>
+      </motion.div>
   );
 };
 

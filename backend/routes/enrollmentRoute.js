@@ -10,7 +10,4 @@ router.get('/getUnEnrolledStudents',verifyToken,checkRole(['admin','instructor']
 router.get('/getEnrolledStudents',verifyToken,checkRole(['admin','instructor']),getEnrolledStudents);
 router.delete('/unenroll/:studentId/:courseId/:batchId/:enrollmentId',verifyToken,checkRole(['admin','instructor']),unEnroll);
 
-
-
-
 export default router;

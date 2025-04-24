@@ -23,6 +23,7 @@ export const initialSignInFormData = {
 export const initialSignUpFormData = {
   userName: "",
   email: "",
+  phoneNumber:"",
   password: "",
 };
 export const signUpFormControls = [
@@ -38,6 +39,13 @@ export const signUpFormControls = [
     label: "Email",
     placeholder: "Enter Email",
     type: "text",
+    componentType: "input",
+  },
+  {
+    name: "phoneNumber",
+    label: "Phone Number",
+    placeholder: "Enter Phone Number",
+    type: "number",
     componentType: "input",
   },
   {

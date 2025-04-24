@@ -3,9 +3,9 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 const registerInstructor = async (req, res) => {
   try {
-    const { userName, email, password } = req.body;
+    const { userName, email, password,phoneNumber } = req.body;
 
-    if (!userName || !email || !password) {
+    if (!userName || !email || !password || !phoneNumber) {
       return res
         .status(400)
         .json({ message: "All fields are required", success: false });
@@ -20,26 +20,33 @@ const registerInstructor = async (req, res) => {
         .json({ message: "Invalid email format", success: false });
     }
 
-    const existingEmail = await User.findOne({ email });
+    const existingUser = await User.findOne({
+      $or: [{ email }, { userName }, { phoneNumber }],
+    });
 
-    if (existingEmail) {
+    if (existingUser) {
+      if (existingUser.email === email) {
       return res
         .status(400)
         .json({ message: "Email already in use", success: false });
-    }
-
-    const existingUserName = await User.findOne({ userName });
-
-    if (existingUserName) {
+      }
+      if (existingUser.userName === userName) {
       return res
         .status(400)
         .json({ message: "Username already taken", success: false });
+      }
+      if (existingUser.phoneNumber === phoneNumber) {
+      return res
+        .status(400)
+        .json({ message: "Phone number already in use", success: false });
+      }
     }
 
     const hashpassword = await bcrypt.hash(password, 10);
     const newInstructor = new User({
       userName,
       email,
+      phoneNumber,
       password: hashpassword,
       role: "instructor",
     });
@@ -51,6 +58,7 @@ const registerInstructor = async (req, res) => {
         _id: newInstructor._id,
         userName: newInstructor.userName,
         email: newInstructor.email,
+        phoneNumber: newInstructor.phoneNumber,
         role: newInstructor.role,
       },
     });
@@ -64,12 +72,12 @@ const registerStudent = async (req, res) => {
   try {
     console.log(req.body);
     
-    const { userName, email, password } = req.body;
+    const { userName, email, password, phoneNumber } = req.body;
 
     // Validate required fields
-    if (!userName || !email || !password) {
+    if (!userName || !email || !password, !phoneNumber) {
       return res.status(400).json({
-        message: 'userName, email, and password are required',
+        message: 'userName, email,phoneNumber and password are required',
         success: false
       });
     }
@@ -83,19 +91,32 @@ const registerStudent = async (req, res) => {
     }
     
     const existingUser = await User.findOne({
-      $or: [{ userName }, { email }],
+      $or: [{ userName }, { email }, { phoneNumber}],
     });
 
     if (existingUser) {
+      if (existingUser.email === email) {
       return res
         .status(400)
-        .json({ message: "User already exists", success: false });
+        .json({ message: "Email already in use", success: false });
+      }
+      if (existingUser.userName === userName) {
+      return res
+        .status(400)
+        .json({ message: "Username already taken", success: false });
+      }
+      if (existingUser.phoneNumber === phoneNumber) {
+      return res
+        .status(400)
+        .json({ message: "Phone number already in use", success: false });
+      }
     }
 
     const hashpassword = await bcrypt.hash(password, 10);
     const newStudent = new User({
       userName,
       email,
+      phoneNumber,
       password: hashpassword,
       role: "student",
       isEnrolled: false,
@@ -107,6 +128,14 @@ const registerStudent = async (req, res) => {
     res.status(201).json({
       message: "student added successfully",
       success: true,
+      student: {
+        _id: newStudent._id,
+        userName: newStudent.userName,
+        email: newStudent.email,
+        phoneNumber: newStudent.phoneNumber,
+        role: newStudent.role,
+      },
+
     });
 
   } catch (error) {
@@ -141,6 +170,7 @@ const login = async (req, res) => {
           id: user.id,
           userName: user.userName,
           email: user.email,
+          phoneNumber:user.phoneNumber,
           role: user.role,
         },
         process.env.JWT_SECRET,
@@ -162,6 +192,7 @@ const login = async (req, res) => {
             id: user.id,
             userName: user.userName,
             email: user.email,
+            phoneNumber:user.phoneNumber,
             role: user.role,
           },
           token,

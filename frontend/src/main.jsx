@@ -17,8 +17,6 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <AuthProvider>
           <InstructorProvider>
-            {/* <ScheduleProvider> */}
-        {/* <NotificationProvider> */}
               <StudentProvider>
                 <EnrollmentProvider>
                   <CourseProvider>
@@ -28,8 +26,6 @@ createRoot(document.getElementById("root")).render(
                   </CourseProvider>
                 </EnrollmentProvider>
               </StudentProvider>
-        {/* </NotificationProvider> */}
-            {/* </ScheduleProvider> */}
           </InstructorProvider>
       </AuthProvider>
     </BrowserRouter>

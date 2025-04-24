@@ -1,7 +1,4 @@
 import jwt, { decode } from "jsonwebtoken";
-
-
-
 export const verifyToken = (req, res, next) => {
   try {
     const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];

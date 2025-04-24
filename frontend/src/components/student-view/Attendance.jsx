@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -11,27 +10,25 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-// import { useBatchContext } from "@/context/BatchContext";
 import { AuthContext } from "@/context/AuthContext";
 import axiosInstance from "@/utils/axiosInstance";
+import { motion } from "framer-motion";
 
 const Attendance = () => {
   const [weeklyData, setWeeklyData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-const { auth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
+  const studentId = auth.user.id;
 
-const studentId = auth.user.id;
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axiosInstance.get(
           `/attendance/studentWeekly/${studentId}`
         );
-        console.log("res", res.data);
-        
-        setWeeklyData(res.data.data|| []);
+        setWeeklyData(res.data.data || []);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to load attendance");
       } finally {
@@ -43,7 +40,7 @@ const studentId = auth.user.id;
       fetchData();
     }
   }, [studentId]);
-  console.log( "wwwwwww",weeklyData);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -60,7 +57,9 @@ const studentId = auth.user.id;
     );
   }
 
-  const totalPresent = Array.isArray(weeklyData) ? weeklyData.reduce((sum, w) => sum + w.present, 0) : 0;
+  const totalPresent = Array.isArray(weeklyData)
+    ? weeklyData.reduce((sum, w) => sum + w.present, 0)
+    : 0;
   const totalAbsent = weeklyData.reduce((sum, w) => sum + w.absent, 0);
   const attendanceRate =
     totalPresent + totalAbsent > 0
@@ -68,15 +67,35 @@ const studentId = auth.user.id;
       : 0;
 
   return (
-    <div className="min-h-screen p-4 md:p-8 bg-gray-50">
-      <div className="max-w-4xl mx-auto">
+    <motion.div
+      className="min-h-screen p-4 md:p-8 bg-gray-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div
+        className="max-w-4xl mx-auto"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <Card className="rounded-xl shadow-md">
           <CardContent className="p-6 space-y-6">
-            <h1 className="text-2xl font-bold text-gray-800">
+            <motion.h1
+              className="text-2xl font-bold text-gray-800"
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
               Your Weekly Attendance
-            </h1>
+            </motion.h1>
 
-            <div className="relative h-64 md:h-80">
+            <motion.div
+              className="relative h-64 md:h-80"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={weeklyData}
@@ -108,38 +127,59 @@ const studentId = auth.user.id;
                   />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
+            </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="bg-emerald-50 p-4">
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-3 gap-4"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { staggerChildren: 0.2 },
+                },
+              }}
+            >
+              <motion.div
+                className="bg-emerald-50 p-4"
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+              >
                 <h3 className="text-sm font-medium text-emerald-800">
                   Total Present
                 </h3>
                 <p className="text-2xl font-bold text-emerald-600">
                   {totalPresent}
                 </p>
-              </Card>
-              <Card className="bg-red-50 p-4">
+              </motion.div>
+              <motion.div
+                className="bg-red-50 p-4"
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+              >
                 <h3 className="text-sm font-medium text-red-800">
                   Total Absent
                 </h3>
                 <p className="text-2xl font-bold text-red-600">
                   {totalAbsent}
                 </p>
-              </Card>
-              <Card className="bg-blue-50 p-4">
+              </motion.div>
+              <motion.div
+                className="bg-blue-50 p-4"
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+              >
                 <h3 className="text-sm font-medium text-blue-800">
                   Attendance Rate
                 </h3>
                 <p className="text-2xl font-bold text-blue-600">
                   {attendanceRate}%
                 </p>
-              </Card>
-            </div>
+              </motion.div>
+            </motion.div>
           </CardContent>
         </Card>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

@@ -4,7 +4,7 @@ import CommonForm from '../../common/CommonForm'
 import { signUpFormControls } from '@/config/customForms'
 import { AuthContext } from '@/context/AuthContext'
 import { signUpSchema } from '@/services/schemasZod.js'
-
+import { motion } from 'framer-motion'
 
 
 const InstructorManagement = () => {
@@ -21,6 +21,12 @@ const InstructorManagement = () => {
        setSignUpFormData(initialSignUpFormData);
      }, [initialSignUpFormData]);
   return (
+     <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
     <Card className="p-6 space-y-4">
     <CardHeader>
       <CardTitle>Add Instructor</CardTitle>
@@ -41,6 +47,7 @@ const InstructorManagement = () => {
       />
     </CardContent>
   </Card>
+  </motion.div>
   )
 }
 
